@@ -8,7 +8,8 @@ import {
   VolumeX,
   MoreHorizontal,
   ListMusic,
-  Maximize2
+  Maximize2,
+  Sparkles
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';

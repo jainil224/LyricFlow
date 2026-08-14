@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Maximize2, Sparkles, Code } from 'lucide-react';
+import { Maximize2, Sparkles } from 'lucide-react';
 import { TRACKS } from './data/tracks';
 import { CoverFlow } from './components/CoverFlow';
 import { PlayerDock } from './components/PlayerDock';
@@ -208,42 +208,27 @@ export default function App() {
 
       {/* Top Navigation / Header Bar */}
       <header className="relative z-30 w-full max-w-5xl pt-3 px-4 flex items-center justify-between">
-        {/* Top Left Corner: Premium Real-Time Clock Widget with Frosted Glass Effect */}
-        <div className="flex items-center gap-2.5 bg-white/10 hover:bg-white/15 backdrop-blur-3xl border border-white/25 px-3.5 py-2 rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] transition-all duration-300 group hover:border-white/40">
-          <div className="relative flex items-center justify-center w-7 h-7 rounded-xl bg-amber-500/20 backdrop-blur-md border border-amber-400/40 text-amber-300 shadow-inner">
-            <Clock className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-300" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-75" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500" />
-          </div>
-
-          <div className="flex flex-col text-left leading-none">
-            <div className="flex items-baseline gap-0.5 text-white font-mono">
-              <span className="text-sm font-bold tracking-tight text-white drop-shadow">
-                {hoursMinutes}
-              </span>
-              <span className="text-[11px] font-semibold text-amber-300">
-                :{seconds}
-              </span>
-              <span className="text-[10px] font-bold text-white/70 tracking-wider ml-1">
-                {ampm}
-              </span>
-            </div>
-            <span className="text-[9px] font-semibold text-white/70 tracking-widest uppercase mt-0.5">
-              {formattedDate}
+        {/* Top Left Corner: Clean Time Pill Widget */}
+        <div className="flex items-center bg-white/10 hover:bg-white/15 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] transition-all duration-300 group hover:border-white/40">
+          <div className="flex items-baseline gap-0.5 text-white font-mono leading-none">
+            <span className="text-xs sm:text-sm font-bold tracking-tight text-white drop-shadow">
+              {hoursMinutes}
+            </span>
+            <span className="text-[11px] font-semibold text-amber-300">
+              :{seconds}
+            </span>
+            <span className="text-[10px] font-bold text-white/80 tracking-wider ml-1 uppercase">
+              {ampm}
             </span>
           </div>
         </div>
 
-        {/* Top Center: Live Listener Counter & Creator Branding Badge */}
-        <div className="flex items-center gap-3">
-          <LiveListenerCounter trackId={currentTrack.id} />
-
-          <div className="hidden lg:flex items-center gap-2 bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300 group hover:border-purple-500/50">
-            <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
-            <span className="text-[11px] font-semibold text-white/90 tracking-wide">
-              Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
-            </span>
-          </div>
+        {/* Top Center: Creator Branding Badge */}
+        <div className="flex items-center gap-2 bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300 group hover:border-purple-500/50">
+          <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
+          <span className="text-[11px] font-semibold text-white/90 tracking-wide">
+            Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
+          </span>
         </div>
 
         {/* Top Right Corner: Full Screen Player Page Button */}
