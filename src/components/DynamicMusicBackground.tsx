@@ -105,7 +105,7 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 pointer-events-none" />
 
       {/* 6. Main Music Player UI Content (CoverFlow + PlayerDock) */}
-      <div className="relative z-10 w-full h-full flex flex-col justify-between items-center py-4 sm:py-6 px-4">
+      <div className="relative z-10 w-full h-full flex flex-col justify-between items-center pt-2 pb-3 sm:py-6 px-3 sm:px-4 gap-2 sm:gap-4 overflow-hidden">
         {children}
       </div>
     </div>
