@@ -35,6 +35,14 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // Preload adjacent tracks in background for instant zero-latency mobile playback
+  useEffect(() => {
+    const nextIdx = (playerState.currentTrackIndex + 1) % TRACKS.length;
+    const prevIdx = (playerState.currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
+    audioEngine.preloadTrack(TRACKS[nextIdx].audioUrl);
+    audioEngine.preloadTrack(TRACKS[prevIdx].audioUrl);
+  }, [playerState.currentTrackIndex]);
+
   const currentTrack = TRACKS[playerState.currentTrackIndex];
 
   // Select Track

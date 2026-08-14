@@ -123,6 +123,37 @@ class AudioEngine {
     }
   }
 
+  private preloadedAudioElements: Map<string, HTMLAudioElement> = new Map();
+
+  public preloadTrack(audioUrl: string) {
+    if (!audioUrl || typeof window === 'undefined') return;
+    const safeUrl = encodeURI(audioUrl);
+    if (this.preloadedAudioElements.has(safeUrl)) return;
+
+    try {
+      const audio = new Audio();
+      audio.preload = 'auto';
+      audio.playsInline = true;
+      audio.setAttribute('playsinline', 'true');
+      audio.setAttribute('webkit-playsinline', 'true');
+      audio.src = safeUrl;
+      audio.load();
+      this.preloadedAudioElements.set(safeUrl, audio);
+    } catch {
+      // Ignore preloader errors
+    }
+  }
+
+  private isAudioFileBuffering(): boolean {
+    if (!this.audioElement || !this.audioElement.src) return true;
+    // If audioElement has started playing audio frames cleanly, readyState >= 3 and not paused
+    return (
+      this.audioElement.paused ||
+      this.audioElement.readyState < 3 ||
+      this.audioElement.currentTime === 0
+    );
+  }
+
   public play(trackType: string = 'pop-synth', bpm: number = 110, audioUrl?: string) {
     this.initContext();
     this.currentTrackType = trackType;
@@ -138,6 +169,7 @@ class AudioEngine {
         this.audioElement.playsInline = true;
         this.audioElement.setAttribute('playsinline', 'true');
         this.audioElement.setAttribute('webkit-playsinline', 'true');
+        this.audioElement.preload = 'auto';
         this.audioElement.ontimeupdate = () => {
           if (this.audioElement) {
             this.triggerTime(this.audioElement.currentTime);
@@ -208,11 +240,13 @@ class AudioEngine {
     if (!this.isPlaying) return;
     const isBassBeat = this.step % 4 === 0;
 
-    // Trigger beat listeners for UI reactivity
+    // Trigger beat listeners for UI reactivity immediately
     this.triggerBeat(this.step, isBassBeat);
 
-    // If custom audio file is playing cleanly, skip synthesizer note generation
-    if (isCustomAudio || !this.ctx || !this.gainNode) return;
+    // If custom audio file is playing cleanly, skip synth notes.
+    // If custom audio file is buffering on mobile, play instant synth notes so user gets 0ms feedback!
+    const isAudioBuffering = isCustomAudio && this.isAudioFileBuffering();
+    if ((isCustomAudio && !isAudioBuffering) || !this.ctx || !this.gainNode) return;
     const now = this.ctx.currentTime;
 
     // Frequencies (C minor / Eb major scale vibes)
