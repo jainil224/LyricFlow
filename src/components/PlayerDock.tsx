@@ -8,7 +8,8 @@ import {
   VolumeX,
   MoreHorizontal,
   ListMusic,
-  Mic
+  Mic,
+  Maximize2
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
@@ -24,6 +25,7 @@ interface PlayerDockProps {
   onToggleMute: () => void;
   onOpenLibrary?: () => void;
   onOpenLyrics?: () => void;
+  onOpenFullScreen?: () => void;
 }
 
 export function PlayerDock({
@@ -37,6 +39,7 @@ export function PlayerDock({
   onToggleMute,
   onOpenLibrary,
   onOpenLyrics,
+  onOpenFullScreen,
 }: PlayerDockProps) {
   const [showVolumePopup, setShowVolumePopup] = useState(false);
   const [showSongDetailsModal, setShowSongDetailsModal] = useState(false);
@@ -299,8 +302,20 @@ export function PlayerDock({
           </div>
         </div>
 
-        {/* Right Side: Lyrics, Song Library & Volume */}
+        {/* Right Side: FullScreen, Lyrics, Song Library & Volume */}
         <div className="flex items-center gap-1 sm:gap-2 text-white/80">
+          {/* Full Screen Dedicated Player Page Button */}
+          {onOpenFullScreen && (
+            <button
+              id="fullscreen-page-btn"
+              onClick={onOpenFullScreen}
+              className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-emerald-400 hover:bg-white/10"
+              title="Open Full Screen Player & Lyrics Page"
+            >
+              <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          )}
+
           {/* Live Karaoke Lyrics Button */}
           {onOpenLyrics && (
             <button
