@@ -16,6 +16,10 @@ class AudioEngine {
   private step: number = 0;
   private beatListeners: Set<BeatListener> = new Set();
   private timeListeners: Set<TimeListener> = new Set();
+  private audioElement: HTMLAudioElement | null = null;
+  private analyserNode: AnalyserNode | null = null;
+  private hasAudioFileError: boolean = false;
+  private currentVolume: number = 0.8;
 
   public subscribeBeat(listener: BeatListener) {
     this.beatListeners.add(listener);
@@ -39,28 +43,57 @@ class AudioEngine {
     this.timeListeners.forEach((listener) => listener(time));
   }
 
-  private initContext() {
-    if (!this.ctx) {
+  public initContext() {
+    if (!this.ctx && typeof window !== 'undefined') {
       const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      this.ctx = new AudioContextClass();
-      this.gainNode = this.ctx.createGain();
-      this.gainNode.gain.setValueAtTime(0.3, this.ctx.currentTime);
-      this.gainNode.connect(this.ctx.destination);
+      if (AudioContextClass) {
+        this.ctx = new AudioContextClass();
+        this.gainNode = this.ctx.createGain();
+        this.gainNode.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        this.gainNode.connect(this.ctx.destination);
+      }
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+    if (!this.audioElement && typeof window !== 'undefined') {
+      this.audioElement = new Audio();
+      this.audioElement.playsInline = true;
+      this.audioElement.setAttribute('playsinline', 'true');
+      this.audioElement.setAttribute('webkit-playsinline', 'true');
+      this.audioElement.preload = 'auto';
+      this.audioElement.ontimeupdate = () => {
+        if (this.audioElement) {
+          this.triggerTime(this.audioElement.currentTime);
+        }
+      };
     }
   }
 
-  private audioElement: HTMLAudioElement | null = null;
-  private analyserNode: AnalyserNode | null = null;
+  public unlock() {
+    this.initContext();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+    if (this.audioElement && !this.audioElement.src) {
+      // Dummy silent playback to unlock iOS Safari HTMLAudioElement restrictions
+      const dummyUrl = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      this.audioElement.src = dummyUrl;
+      const playPromise = this.audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          if (this.audioElement) this.audioElement.pause();
+        }).catch(() => {});
+      }
+    }
+  }
 
   public getAudioElement(): HTMLAudioElement | null {
     return this.audioElement;
   }
 
   public getCurrentTime(): number | null {
-    if (this.audioElement && !isNaN(this.audioElement.currentTime)) {
+    if (this.audioElement && !isNaN(this.audioElement.currentTime) && this.audioElement.currentTime > 0) {
       return this.audioElement.currentTime;
     }
     return null;
@@ -81,12 +114,12 @@ class AudioEngine {
   }
 
   public setVolume(volume: number) {
+    this.currentVolume = Math.max(0, Math.min(1, volume));
     if (this.gainNode && this.ctx) {
-      const safeVol = Math.max(0, Math.min(1, volume));
-      this.gainNode.gain.setTargetAtTime(safeVol * 0.4, this.ctx.currentTime, 0.05);
+      this.gainNode.gain.setTargetAtTime(this.currentVolume * 0.4, this.ctx.currentTime, 0.05);
     }
     if (this.audioElement) {
-      this.audioElement.volume = Math.max(0, Math.min(1, volume));
+      this.audioElement.volume = this.currentVolume;
     }
   }
 
@@ -96,20 +129,39 @@ class AudioEngine {
     this.bpm = bpm;
     this.isPlaying = true;
     this.step = 0;
-
-    if (this.audioElement) {
-      this.audioElement.pause();
-      this.audioElement = null;
-    }
+    this.hasAudioFileError = false;
 
     if (audioUrl) {
-      this.audioElement = new Audio(audioUrl);
-      this.audioElement.ontimeupdate = () => {
-        if (this.audioElement) {
-          this.triggerTime(this.audioElement.currentTime);
-        }
-      };
-      this.audioElement.play().catch((err) => console.warn('Audio file playback fallback to synth:', err));
+      const safeUrl = encodeURI(audioUrl);
+      if (!this.audioElement) {
+        this.audioElement = new Audio();
+        this.audioElement.playsInline = true;
+        this.audioElement.setAttribute('playsinline', 'true');
+        this.audioElement.setAttribute('webkit-playsinline', 'true');
+        this.audioElement.ontimeupdate = () => {
+          if (this.audioElement) {
+            this.triggerTime(this.audioElement.currentTime);
+          }
+        };
+      }
+
+      // Check if URL has changed
+      const currentSrc = this.audioElement.src;
+      if (!currentSrc || !currentSrc.endsWith(safeUrl)) {
+        this.audioElement.src = safeUrl;
+        this.audioElement.load();
+      }
+
+      this.audioElement.volume = this.currentVolume;
+      const playPromise = this.audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Audio file playback fallback to synth:', err);
+          this.hasAudioFileError = true;
+        });
+      }
+    } else if (this.audioElement) {
+      this.audioElement.pause();
     }
 
     if (this.timerId) {
@@ -118,7 +170,7 @@ class AudioEngine {
 
     const intervalMs = (60 / this.bpm / 2) * 1000; // 8th note interval
     this.timerId = window.setInterval(() => {
-      this.playNoteStep(!!audioUrl);
+      this.playNoteStep(!!audioUrl && !this.hasAudioFileError);
       this.step = (this.step + 1) % 16;
     }, intervalMs);
   }
@@ -159,7 +211,7 @@ class AudioEngine {
     // Trigger beat listeners for UI reactivity
     this.triggerBeat(this.step, isBassBeat);
 
-    // If custom audio file is playing, skip synthesizer note generation
+    // If custom audio file is playing cleanly, skip synthesizer note generation
     if (isCustomAudio || !this.ctx || !this.gainNode) return;
     const now = this.ctx.currentTime;
 
@@ -231,3 +283,17 @@ class AudioEngine {
 }
 
 export const audioEngine = new AudioEngine();
+
+// Auto unlock audio context on first mobile touch/click interaction
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    audioEngine.unlock();
+    window.removeEventListener('pointerdown', unlockAudio);
+    window.removeEventListener('touchstart', unlockAudio);
+    window.removeEventListener('click', unlockAudio);
+  };
+  window.addEventListener('pointerdown', unlockAudio, { once: true });
+  window.addEventListener('touchstart', unlockAudio, { once: true });
+  window.addEventListener('click', unlockAudio, { once: true });
+}
+

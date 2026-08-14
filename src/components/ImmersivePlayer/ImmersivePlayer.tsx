@@ -51,20 +51,7 @@ export function ImmersivePlayer({
   // Connect Audio Analyzer hook driving CSS variables (Section 6 & 7)
   useAudioAnalyzer(containerRef, { isPlaying: playerState.isPlaying });
 
-  // Browser Fullscreen API Integration (Section 2)
-  useEffect(() => {
-    if (typeof document !== 'undefined' && document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(() => {
-        // Fallback gracefully if browser restricts fullscreen request
-      });
-    }
 
-    return () => {
-      if (typeof document !== 'undefined' && document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
-      }
-    };
-  }, []);
 
   // Extract and cache color palette per track ID (Section 4 & 16)
   useEffect(() => {

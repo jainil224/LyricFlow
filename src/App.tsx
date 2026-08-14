@@ -39,6 +39,7 @@ export default function App() {
 
   // Select Track
   const handleSelectTrack = useCallback((index: number) => {
+    audioEngine.unlock();
     setPlayerState((prev) => {
       const nextIndex = Math.max(0, Math.min(TRACKS.length - 1, index));
       if (prev.isPlaying) {
@@ -54,6 +55,7 @@ export default function App() {
 
   // Prev / Next
   const handlePrevTrack = useCallback(() => {
+    audioEngine.unlock();
     setPlayerState((prev) => {
       const nextIndex = prev.currentTrackIndex > 0 ? prev.currentTrackIndex - 1 : TRACKS.length - 1;
       if (prev.isPlaying) {
@@ -68,6 +70,7 @@ export default function App() {
   }, []);
 
   const handleNextTrack = useCallback(() => {
+    audioEngine.unlock();
     setPlayerState((prev) => {
       const nextIndex = prev.currentTrackIndex < TRACKS.length - 1 ? prev.currentTrackIndex + 1 : 0;
       if (prev.isPlaying) {
@@ -83,6 +86,7 @@ export default function App() {
 
   // Toggle Play/Pause
   const handleTogglePlay = useCallback(() => {
+    audioEngine.unlock();
     setPlayerState((prev) => {
       const nextPlaying = !prev.isPlaying;
       if (nextPlaying) {
