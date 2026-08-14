@@ -91,9 +91,11 @@ export default function App() {
 
   // Seek
   const handleSeek = useCallback((newTime: number) => {
+    const clampedTime = Math.max(0, Math.min(currentTrack.duration, newTime));
+    audioEngine.seek(clampedTime);
     setPlayerState((prev) => ({
       ...prev,
-      progress: Math.max(0, Math.min(currentTrack.duration, newTime)),
+      progress: clampedTime,
     }));
   }, [currentTrack.duration]);
 

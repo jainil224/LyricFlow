@@ -90,6 +90,16 @@ class AudioEngine {
     }
   }
 
+  public seek(timeSeconds: number) {
+    if (this.audioElement && !isNaN(timeSeconds)) {
+      try {
+        this.audioElement.currentTime = timeSeconds;
+      } catch (err) {
+        console.warn('Audio seek error:', err);
+      }
+    }
+  }
+
   public stop() {
     this.pause();
     if (this.audioElement) {
