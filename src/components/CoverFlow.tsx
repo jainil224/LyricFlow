@@ -105,9 +105,9 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack, onOpenFullScreen
               zIndex,
               transformStyle: 'preserve-3d',
             }}
-            className={`absolute cursor-pointer w-[185px] sm:w-[215px] h-[245px] sm:h-[280px] rounded-2xl p-2 flex flex-col justify-between transition-all duration-300 ${
+            className={`absolute cursor-pointer w-[185px] sm:w-[215px] h-[245px] sm:h-[280px] rounded-2xl p-2 flex flex-col justify-between will-change-transform transform-gpu ${
               offset === 0
-                ? 'bg-gradient-to-b from-white/25 via-white/15 to-white/5 backdrop-blur-2xl border-2 border-white/40 shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.09]'
+                ? 'bg-gradient-to-b from-white/25 via-white/15 to-white/5 backdrop-blur-2xl border-2 border-white/40 shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_30px_rgba(255,255,255,0.2)]'
                 : 'bg-white/10 backdrop-blur-lg border border-white/15 shadow-xl hover:border-white/30 hover:opacity-95'
             }`}
           >

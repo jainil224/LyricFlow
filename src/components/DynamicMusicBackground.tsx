@@ -73,7 +73,7 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
       {/* 1. Heavy Blurred Cover Artwork Layer (Previous Image during Crossfade) */}
       {isCrossfading && (
         <div
-          className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.4] contrast-[1.1] scale-125 transition-opacity duration-1000 opacity-0"
+          className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.4] contrast-[1.1] scale-125 transition-opacity duration-1000 opacity-0 will-change-transform transform-gpu translate-z-0"
           style={{
             backgroundImage: `url(${prevCoverUrl})`,
           }}
@@ -82,7 +82,7 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
 
       {/* 2. High-Fidelity Saturated Cover Artwork Layer (Matches Active Song Card 100%) */}
       <div
-        className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 pointer-events-none will-change-transform transform-gpu translate-z-0"
         style={{
           backgroundImage: `url(${currentCoverUrl})`,
           opacity: 0.82,
@@ -91,7 +91,7 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
 
       {/* 3. Accent & Primary Color Atmospheric Drifting Glows */}
       <div
-        className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-in-out mix-blend-soft-light"
+        className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-in-out mix-blend-soft-light will-change-transform transform-gpu translate-z-0"
         style={{
           background: `
             radial-gradient(circle at 25% 25%, ${track.accentColor || 'var(--bg-primary)'}, transparent 55%),

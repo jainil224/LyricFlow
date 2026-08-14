@@ -125,7 +125,7 @@ export function PlayerDock({
   }, []);
 
   return (
-    <div className="relative z-40 w-full max-w-4xl px-4 flex flex-col items-center">
+    <div className="relative z-40 w-full max-w-4xl px-3 sm:px-4 flex flex-col items-center select-none">
       {/* High-Contrast Glassmorphic Pill Dock */}
       <div
         id="player-dock-pill"

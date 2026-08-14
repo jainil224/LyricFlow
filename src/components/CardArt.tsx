@@ -19,7 +19,7 @@ export function CardArt({ track, isActive }: CardArtProps) {
             x: { type: 'spring', stiffness: 200, damping: 20 },
             rotate: { duration: 12, repeat: Infinity, ease: 'linear' },
           }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-stone-950 border-4 border-stone-900 shadow-2xl flex items-center justify-center z-0 pointer-events-none"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-stone-950 border-4 border-stone-900 shadow-2xl flex items-center justify-center z-0 pointer-events-none will-change-transform transform-gpu translate-z-0"
           style={{
             backgroundImage: `radial-gradient(circle, #262626 25%, #171717 35%, #0a0a0a 60%, #171717 75%, #000 100%)`,
           }}
