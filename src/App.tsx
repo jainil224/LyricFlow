@@ -207,8 +207,8 @@ export default function App() {
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
 
       {/* Top Navigation / Header Bar */}
-      <header className="relative z-30 w-full max-w-5xl pt-3 px-3 sm:px-4 flex flex-col items-center gap-2 select-none">
-        <div className="w-full flex items-center justify-between gap-1.5 sm:gap-3">
+      <header className="relative z-30 w-full max-w-5xl pt-2 px-3 sm:px-4 flex flex-col items-center gap-1.5 select-none">
+        <div className="w-full flex items-center justify-between gap-1.5">
           {/* Top Left Corner: Clean Time Pill Widget */}
           <div className="flex items-center bg-white/10 hover:bg-white/15 backdrop-blur-2xl border border-white/20 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] transition-all duration-300 shrink-0">
             <div className="flex items-baseline gap-0.5 text-white font-mono leading-none">
@@ -224,10 +224,10 @@ export default function App() {
             </div>
           </div>
 
-          {/* Top Center: Creator Branding Badge with 👨🏻‍💻 Emoji */}
-          <div className="flex items-center gap-1.5 bg-stone-900/80 hover:bg-stone-900/90 backdrop-blur-2xl border border-white/20 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full shadow-2xl transition-all duration-300 overflow-hidden">
+          {/* Desktop Top Center: Creator Branding Badge with 👨🏻‍💻 Emoji */}
+          <div className="hidden sm:flex items-center gap-1.5 bg-stone-900/80 hover:bg-stone-900/90 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300">
             <span className="text-xs sm:text-sm leading-none shrink-0">👨🏻‍💻</span>
-            <span className="text-[10px] sm:text-[11px] font-semibold text-white/90 tracking-wide whitespace-nowrap">
+            <span className="text-[11px] font-semibold text-white/90 tracking-wide whitespace-nowrap">
               Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
             </span>
           </div>
@@ -235,12 +235,20 @@ export default function App() {
           {/* Top Right Corner: Full Screen Player Page Button */}
           <button
             onClick={() => setIsFullScreenOpen(true)}
-            className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 text-xs font-semibold text-white/90 hover:text-white flex items-center gap-1.5 shadow-xl transition-all active:scale-95 shrink-0"
+            className="p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 text-xs font-semibold text-white/90 hover:text-white flex items-center gap-1.5 shadow-xl transition-all active:scale-95 shrink-0"
             title="Open Full Screen Player Page"
           >
             <Maximize2 className="w-3.5 h-3.5 text-emerald-400" />
             <span className="hidden sm:inline">Full Screen Player</span>
           </button>
+        </div>
+
+        {/* Mobile Dedicated Creator Branding Badge (Centered on Phone Screens) */}
+        <div className="flex sm:hidden items-center gap-1.5 bg-stone-900/85 backdrop-blur-2xl border border-white/20 px-3 py-0.5 rounded-full shadow-lg">
+          <span className="text-xs leading-none shrink-0">👨🏻‍💻</span>
+          <span className="text-[10px] font-semibold text-white/90 tracking-wide">
+            Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
+          </span>
         </div>
       </header>
 
