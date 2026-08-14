@@ -4,6 +4,7 @@
  */
 
 type BeatListener = (step: number, isBassBeat: boolean) => void;
+type TimeListener = (currentTime: number) => void;
 
 class AudioEngine {
   private ctx: AudioContext | null = null;
@@ -14,6 +15,7 @@ class AudioEngine {
   private bpm: number = 110;
   private step: number = 0;
   private beatListeners: Set<BeatListener> = new Set();
+  private timeListeners: Set<TimeListener> = new Set();
 
   public subscribeBeat(listener: BeatListener) {
     this.beatListeners.add(listener);
@@ -22,8 +24,19 @@ class AudioEngine {
     };
   }
 
+  public subscribeTime(listener: TimeListener) {
+    this.timeListeners.add(listener);
+    return () => {
+      this.timeListeners.delete(listener);
+    };
+  }
+
   private triggerBeat(step: number, isBassBeat: boolean) {
     this.beatListeners.forEach((listener) => listener(step, isBassBeat));
+  }
+
+  private triggerTime(time: number) {
+    this.timeListeners.forEach((listener) => listener(time));
   }
 
   private initContext() {
@@ -91,6 +104,11 @@ class AudioEngine {
 
     if (audioUrl) {
       this.audioElement = new Audio(audioUrl);
+      this.audioElement.ontimeupdate = () => {
+        if (this.audioElement) {
+          this.triggerTime(this.audioElement.currentTime);
+        }
+      };
       this.audioElement.play().catch((err) => console.warn('Audio file playback fallback to synth:', err));
     }
 

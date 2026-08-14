@@ -34,12 +34,19 @@ export function parseLRC(lrcContent: string): ParsedLyricLine[] {
     }
 
     text = text.trim();
-    if (text && matches.length > 0) {
+    if (matches.length > 0) {
       for (const time of matches) {
-        result.push({ time, text });
+        result.push({ time, text: text || '♪ (Music) ♪' });
       }
     }
   }
 
-  return result.sort((a, b) => a.time - b.time);
+  const sorted = result.sort((a, b) => a.time - b.time);
+
+  // If the first vocal line starts after 2 seconds, insert an intro line at 0s
+  if (sorted.length > 0 && sorted[0].time > 2) {
+    sorted.unshift({ time: 0, text: '♪ (Instrumental Intro) ♪' });
+  }
+
+  return sorted;
 }

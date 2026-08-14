@@ -123,34 +123,42 @@ export default function App() {
     });
   }, []);
 
-  // Progress playback timer (Smooth 250ms interval ticker)
+  // Real-time zero-latency audio progress subscriber & ticker
   useEffect(() => {
+    // 1. Instant ontimeupdate subscriber for 0ms latency audio sync
+    const unsubscribe = audioEngine.subscribeTime((exactTime) => {
+      setPlayerState((prev) => {
+        const track = TRACKS[prev.currentTrackIndex];
+        if (exactTime >= track.duration) {
+          const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
+          audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
+          return { ...prev, currentTrackIndex: nextIdx, progress: 0 };
+        }
+        return { ...prev, progress: exactTime };
+      });
+    });
+
+    // 2. High-frequency 100ms ticker fallback for synthesised tracks
     let interval: number | null = null;
     if (playerState.isPlaying) {
       interval = window.setInterval(() => {
         setPlayerState((prev) => {
-          const track = TRACKS[prev.currentTrackIndex];
           const exactTime = audioEngine.getCurrentTime();
-          const currentProgress = exactTime !== null ? exactTime : prev.progress + 0.25;
-
-          if (currentProgress >= track.duration) {
-            // Auto advance next track
+          if (exactTime !== null) return prev; // Managed by subscriber above
+          const track = TRACKS[prev.currentTrackIndex];
+          const nextProgress = prev.progress + 0.1;
+          if (nextProgress >= track.duration) {
             const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
             audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
-            return {
-              ...prev,
-              currentTrackIndex: nextIdx,
-              progress: 0,
-            };
+            return { ...prev, currentTrackIndex: nextIdx, progress: 0 };
           }
-          return {
-            ...prev,
-            progress: currentProgress,
-          };
+          return { ...prev, progress: nextProgress };
         });
-      }, 250);
+      }, 100);
     }
+
     return () => {
+      unsubscribe();
       if (interval) clearInterval(interval);
     };
   }, [playerState.isPlaying]);

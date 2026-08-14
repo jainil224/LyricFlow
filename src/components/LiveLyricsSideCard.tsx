@@ -3,6 +3,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { getLyricsForTrack, fetchLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
+import { LineMaskSplit } from './LineMaskSplit';
 
 interface LiveLyricsSideCardProps {
   track: Track;
@@ -114,19 +115,19 @@ export function LiveLyricsSideCard({ track, playerState, onSeek }: LiveLyricsSid
       >
         {lyrics.map((line, idx) => {
           const isActive = idx === activeIndex;
+          const isPast = idx < activeIndex;
 
           return (
-            <div
-              key={idx}
-              ref={(el) => (lineRefs.current[idx] = el)}
-              onClick={() => onSeek(line.time)}
-              className={`cursor-pointer transition-all duration-500 select-none origin-left ${
-                isActive
-                  ? 'text-white font-black text-lg sm:text-xl leading-snug drop-shadow-[0_4px_12px_rgba(255,255,255,0.4)] scale-[1.03] opacity-100'
-                  : 'text-white/35 font-bold text-sm sm:text-base leading-snug blur-[0.4px] hover:blur-none hover:text-white/70 hover:opacity-90'
-              }`}
-            >
-              <p>{line.text}</p>
+            <div key={idx} ref={(el) => (lineRefs.current[idx] = el)}>
+              <LineMaskSplit
+                text={line.text}
+                isActive={isActive}
+                isPast={isPast}
+                accentColor={track.accentColor || 'rgba(255, 255, 255, 0.6)'}
+                splitMode="words"
+                blurIntensity={12}
+                onClick={() => onSeek(line.time)}
+              />
             </div>
           );
         })}

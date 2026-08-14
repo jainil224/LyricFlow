@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Track, PlayerState } from '../../types';
 import { getLyricsForTrack, fetchLyricsForTrack, LyricLine } from '../../data/lyrics';
+import { LineMaskSplit } from '../LineMaskSplit';
 
 interface SyncedLyricsProps {
   track: Track;
@@ -76,24 +77,16 @@ export function SyncedLyrics({ track, playerState, onSeek }: SyncedLyricsProps) 
           const isPast = idx < activeLyricIndex;
 
           return (
-            <div
-              key={idx}
-              ref={(el) => (lineRefs.current[idx] = el)}
-              onClick={() => onSeek(line.time)}
-              className={`cursor-pointer transition-all duration-500 origin-left ${
-                isActive
-                  ? 'text-white font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight opacity-100 scale-[1.03]'
-                  : isPast
-                  ? 'text-white/35 font-bold text-lg sm:text-2xl leading-tight blur-[0.4px] hover:blur-none hover:text-white/75 transition-all duration-300'
-                  : 'text-white/45 font-bold text-lg sm:text-2xl leading-tight blur-[0.5px] hover:blur-none hover:text-white/75 transition-all duration-300'
-              }`}
-              style={{
-                textShadow: isActive
-                  ? `0 0 24px ${track.accentColor || 'rgba(255,255,255,0.6)'}`
-                  : 'none',
-              }}
-            >
-              <p>{line.text}</p>
+            <div key={idx} ref={(el) => (lineRefs.current[idx] = el)}>
+              <LineMaskSplit
+                text={line.text}
+                isActive={isActive}
+                isPast={isPast}
+                accentColor={track.accentColor || 'rgba(255, 255, 255, 0.6)'}
+                splitMode="words"
+                blurIntensity={16}
+                onClick={() => onSeek(line.time)}
+              />
             </div>
           );
         })}

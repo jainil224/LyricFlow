@@ -17,6 +17,7 @@ import { extractColorsFromImage, ExtractedColors } from '../utils/colorExtractor
 import { getLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
 import { AnimatedBackground } from './AnimatedBackground';
+import { LineMaskSplit } from './LineMaskSplit';
 
 interface FullScreenNowPlayingProps {
   track: Track;
@@ -250,19 +251,16 @@ export function FullScreenNowPlaying({
                 const isPast = idx < activeLyricIndex;
 
                 return (
-                  <div
-                    key={idx}
-                    ref={(el) => (lineRefs.current[idx] = el)}
-                    onClick={() => onSeek(line.time)}
-                    className={`cursor-pointer transition-all duration-500 select-none origin-left ${
-                      isActive
-                        ? 'text-white font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight drop-shadow-[0_4px_24px_rgba(255,255,255,0.6)] scale-[1.03] opacity-100'
-                        : isPast
-                        ? 'text-white/40 font-bold text-lg sm:text-2xl leading-tight blur-[0.4px] hover:blur-none hover:text-white/75 transition-all duration-300'
-                        : 'text-white/25 font-bold text-lg sm:text-2xl leading-tight blur-[0.5px] hover:blur-none hover:text-white/75 transition-all duration-300'
-                    }`}
-                  >
-                    <p>{line.text}</p>
+                  <div key={idx} ref={(el) => (lineRefs.current[idx] = el)}>
+                    <LineMaskSplit
+                      text={line.text}
+                      isActive={isActive}
+                      isPast={isPast}
+                      accentColor={track.accentColor || 'rgba(255, 255, 255, 0.6)'}
+                      splitMode="words"
+                      blurIntensity={16}
+                      onClick={() => onSeek(line.time)}
+                    />
                   </div>
                 );
               })}
