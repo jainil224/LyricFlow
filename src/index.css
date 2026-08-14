@@ -47,4 +47,24 @@ html, body, #root {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Mobile Touch & Scrollbar Optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 
+button, a, input, select {
+  touch-action: manipulation;
+}
+
+.pb-safe {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
