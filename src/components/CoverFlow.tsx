@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Track } from '../types';
 import { CardArt } from './CardArt';
@@ -9,8 +10,20 @@ interface CoverFlowProps {
 }
 
 export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps) {
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== 'undefined' ? window.innerWidth < 640 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="relative w-full max-w-4xl h-[300px] sm:h-[340px] flex items-center justify-center select-none perspective-[1200px] overflow-visible">
+    <div className="relative w-full max-w-4xl h-[260px] sm:h-[340px] flex items-center justify-center select-none perspective-[1200px] overflow-visible">
       {tracks.map((track, index) => {
         const offset = index - activeIndex;
         const isVisible = Math.abs(offset) <= 2;
@@ -28,36 +41,36 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps
         if (offset === 0) {
           x = 0;
           rotateY = 0;
-          z = 45;
-          scale = 1.05;
+          z = isMobile ? 30 : 45;
+          scale = isMobile ? 1.02 : 1.05;
           opacity = 1;
           zIndex = 30;
         } else if (offset === -1) {
-          x = -130;
-          rotateY = 28;
+          x = isMobile ? -95 : -130;
+          rotateY = isMobile ? 24 : 28;
           z = -20;
-          scale = 0.86;
+          scale = isMobile ? 0.82 : 0.86;
           opacity = 0.85;
           zIndex = 20;
         } else if (offset === 1) {
-          x = 130;
-          rotateY = -28;
+          x = isMobile ? 95 : 130;
+          rotateY = isMobile ? -24 : -28;
           z = -20;
-          scale = 0.86;
+          scale = isMobile ? 0.82 : 0.86;
           opacity = 0.85;
           zIndex = 20;
         } else if (offset === -2) {
-          x = -240;
-          rotateY = 44;
+          x = isMobile ? -170 : -240;
+          rotateY = isMobile ? 38 : 44;
           z = -70;
-          scale = 0.72;
+          scale = isMobile ? 0.65 : 0.72;
           opacity = 0.6;
           zIndex = 10;
         } else if (offset === 2) {
-          x = 240;
-          rotateY = -44;
+          x = isMobile ? 170 : 240;
+          rotateY = isMobile ? -38 : -44;
           z = -70;
-          scale = 0.72;
+          scale = isMobile ? 0.65 : 0.72;
           opacity = 0.6;
           zIndex = 10;
         }

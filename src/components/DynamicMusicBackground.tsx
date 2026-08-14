@@ -111,7 +111,7 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
   return (
     <div
       ref={containerRef}
-      className="relative w-screen h-screen overflow-hidden bg-black select-none transition-all duration-1000 ease-in-out"
+      className="relative w-full min-h-screen h-[100dvh] overflow-hidden bg-black select-none transition-all duration-1000 ease-in-out"
       style={{
         '--bg-primary': colors.primary,
         '--bg-secondary': colors.secondary,
