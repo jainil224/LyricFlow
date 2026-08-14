@@ -45,8 +45,19 @@ export function FullScreenPlayerPage({
 
   // Load lyrics for active track
   useEffect(() => {
-    const loaded = getLyricsForTrack(track.id, track.title, track.artist);
-    setLyrics(loaded);
+    let isMounted = true;
+    const initial = getLyricsForTrack(track.id, track.title, track.artist);
+    setLyrics(initial);
+
+    fetchLyricsForTrack(track.id).then((loaded) => {
+      if (isMounted && loaded.length > 0) {
+        setLyrics(loaded);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [track.id, track.title, track.artist]);
 
   // Sync active line with playerState.progress

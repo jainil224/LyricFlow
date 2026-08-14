@@ -53,6 +53,13 @@ const SONGS = [
   { title: "The Fate of Ophelia", artist: "Taylor Swift", album: "Single", duration: "4:04" },
   { title: "Until I Found You", artist: "Stephen Sanchez", album: "Until I Found You - Single", duration: "2:57" },
   { title: "Your Eyes", artist: "Barney Sku", album: "Single", duration: "3:00" },
+  { title: "Take on Me", artist: "Weezer", album: "Weezer (Teal Album)", duration: "3:43" },
+  { title: "The Winner Takes It All", artist: "ABBA", album: "Super Trouper", duration: "4:55" },
+  { title: "Sailor Song", artist: "Gigi Perez", album: "Sailor Song - Single", duration: "4:11" },
+  { title: "Baby", artist: "Justin Bieber", album: "My World 2.0", duration: "3:39" },
+  { title: "Beggin'", artist: "Måneskin", album: "Chosen", duration: "3:31" },
+  { title: "Right Here Waiting", artist: "Richard Marx", album: "Repeat Offender", duration: "4:23" },
+  { title: "Opalite", artist: "Taylor Swift", album: "Single", duration: "4:00" },
 ];
 
 function slugify(str) {

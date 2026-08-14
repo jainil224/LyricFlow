@@ -242,5 +242,89 @@
     "duration": "3:00",
     "slug": "barney-sku-your-eyes",
     "status": "not_found"
+  },
+  {
+    "title": "Take on Me",
+    "artist": "Weezer",
+    "album": "Weezer (Teal Album)",
+    "duration": "3:43",
+    "slug": "weezer-take-on-me",
+    "status": "synced",
+    "file": "weezer-take-on-me.lrc",
+    "matchedTrack": "Take on Me",
+    "matchedArtist": "Weezer",
+    "matchedDuration": 223.566485
+  },
+  {
+    "title": "The Winner Takes It All",
+    "artist": "ABBA",
+    "album": "Super Trouper",
+    "duration": "4:55",
+    "slug": "abba-the-winner-takes-it-all",
+    "status": "synced",
+    "file": "abba-the-winner-takes-it-all.lrc",
+    "matchedTrack": "The Winner Takes It All",
+    "matchedArtist": "ABBA",
+    "matchedDuration": 295
+  },
+  {
+    "title": "Sailor Song",
+    "artist": "Gigi Perez",
+    "album": "Sailor Song - Single",
+    "duration": "4:11",
+    "slug": "gigi-perez-sailor-song",
+    "status": "synced",
+    "file": "gigi-perez-sailor-song.lrc",
+    "matchedTrack": "Sailor Song",
+    "matchedArtist": "Gigi Perez",
+    "matchedDuration": 212
+  },
+  {
+    "title": "Baby",
+    "artist": "Justin Bieber",
+    "album": "My World 2.0",
+    "duration": "3:39",
+    "slug": "justin-bieber-baby",
+    "status": "synced",
+    "file": "justin-bieber-baby.lrc",
+    "matchedTrack": "Baby",
+    "matchedArtist": "Justin Bieber",
+    "matchedDuration": 219
+  },
+  {
+    "title": "Beggin'",
+    "artist": "Måneskin",
+    "album": "Chosen",
+    "duration": "3:31",
+    "slug": "m-neskin-beggin",
+    "status": "synced",
+    "file": "m-neskin-beggin.lrc",
+    "matchedTrack": "Beggin'",
+    "matchedArtist": "Måneskin",
+    "matchedDuration": 211
+  },
+  {
+    "title": "Right Here Waiting",
+    "artist": "Richard Marx",
+    "album": "Repeat Offender",
+    "duration": "4:23",
+    "slug": "richard-marx-right-here-waiting",
+    "status": "synced",
+    "file": "richard-marx-right-here-waiting.lrc",
+    "matchedTrack": "Right Here Waiting",
+    "matchedArtist": "015. Richard Marx",
+    "matchedDuration": 263
+  },
+  {
+    "title": "Opalite",
+    "artist": "Taylor Swift",
+    "album": "Single",
+    "duration": "4:00",
+    "slug": "taylor-swift-opalite",
+    "status": "synced",
+    "file": "taylor-swift-opalite.lrc",
+    "matchedTrack": "Opalite",
+    "matchedArtist": "Taylor Swift",
+    "matchedDuration": 238
   }
 ]

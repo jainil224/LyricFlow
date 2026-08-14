@@ -75,6 +75,7 @@ const ARTIST_HINTS = {
 };
 
 const SEARCH_OVERRIDE = {
+  '4-Weezer-Take-on-Me-9U9H51 (1).mp3': 'Take on Me Weezer',
   'i_m your death bed - Powfu _ beabadoobee vs Jason Mraz (Mashup)(MP3_320K).mp3': 'death bed Powfu',
   'SPIDER-MAN_ INTO THE SPIDER VERSE 「 MMV 」 Falling(MP3_320K).mp3': 'Falling Trevor Daniel',
 };

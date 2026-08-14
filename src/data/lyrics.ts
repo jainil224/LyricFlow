@@ -25,6 +25,13 @@ export const TRACK_ID_TO_LRC_PATH: Record<string, string> = {
   'the-fate-of-ophelia': '/lyrics/taylor-swift-the-fate-of-ophelia.lrc',
   'until-i-found-you': '/lyrics/stephen-sanchez-until-i-found-you.lrc',
   'your-eyes': '/lyrics/barney-sku-your-eyes.lrc',
+  'take-on-me': '/lyrics/weezer-take-on-me.lrc',
+  'the-winner-takes-it-all': '/lyrics/abba-the-winner-takes-it-all.lrc',
+  'sailor-song': '/lyrics/gigi-perez-sailor-song.lrc',
+  'baby': '/lyrics/justin-bieber-baby.lrc',
+  'beggin': '/lyrics/m-neskin-beggin.lrc',
+  'right-here-waiting': '/lyrics/richard-marx-right-here-waiting.lrc',
+  'opalite': '/lyrics/taylor-swift-opalite.lrc',
 };
 
 // In-memory cache for parsed lyrics
