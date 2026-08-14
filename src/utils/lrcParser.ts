@@ -1,12 +1,12 @@
 export interface ParsedLyricLine {
-  timeSeconds: number;
+  time: number;
   text: string;
 }
 
 /**
  * Lightweight LRC format parser
  * Converts LRC formatted strings like "[01:23.45] Lyric text line"
- * into an array of { timeSeconds: number, text: string } sorted by timestamp.
+ * into an array of { time: number, text: string } sorted by timestamp.
  */
 export function parseLRC(lrcContent: string): ParsedLyricLine[] {
   if (!lrcContent) return [];
@@ -28,18 +28,18 @@ export function parseLRC(lrcContent: string): ParsedLyricLine[] {
     while ((match = lrcRegex.exec(trimmed)) !== null) {
       const minutes = parseInt(match[1], 10);
       const seconds = parseFloat(match[2]);
-      const timeSeconds = minutes * 60 + seconds;
-      matches.push(timeSeconds);
+      const time = minutes * 60 + seconds;
+      matches.push(time);
       text = text.replace(match[0], '');
     }
 
     text = text.trim();
     if (text && matches.length > 0) {
-      for (const timeSeconds of matches) {
-        result.push({ timeSeconds, text });
+      for (const time of matches) {
+        result.push({ time, text });
       }
     }
   }
 
-  return result.sort((a, b) => a.timeSeconds - b.timeSeconds);
+  return result.sort((a, b) => a.time - b.time);
 }

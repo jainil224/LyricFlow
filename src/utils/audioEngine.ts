@@ -40,6 +40,25 @@ class AudioEngine {
   }
 
   private audioElement: HTMLAudioElement | null = null;
+  private analyserNode: AnalyserNode | null = null;
+
+  public getAudioElement(): HTMLAudioElement | null {
+    return this.audioElement;
+  }
+
+  public getAnalyserNode(): AnalyserNode | null {
+    this.initContext();
+    if (!this.ctx) return null;
+    if (!this.analyserNode) {
+      this.analyserNode = this.ctx.createAnalyser();
+      this.analyserNode.fftSize = 64; // 32 frequency bins
+      this.analyserNode.smoothingTimeConstant = 0.8;
+      if (this.gainNode) {
+        this.gainNode.connect(this.analyserNode);
+      }
+    }
+    return this.analyserNode;
+  }
 
   public setVolume(volume: number) {
     if (this.gainNode && this.ctx) {

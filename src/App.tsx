@@ -7,7 +7,7 @@ import { DynamicMusicBackground } from './components/DynamicMusicBackground';
 import { SongListDrawer } from './components/SongListDrawer';
 import { LyricsModal } from './components/LyricsModal';
 import { LiveLyricsSideCard } from './components/LiveLyricsSideCard';
-import { FullScreenNowPlaying } from './components/FullScreenNowPlaying';
+import { ImmersivePlayer } from './components/ImmersivePlayer/ImmersivePlayer';
 import { PlayerState } from './types';
 import { audioEngine } from './utils/audioEngine';
 
@@ -292,9 +292,9 @@ export default function App() {
         />
       )}
 
-      {/* Full Screen Dedicated Player & Lyrics Page */}
+      {/* Immersive Fullscreen Listening Mode */}
       {isFullScreenOpen && (
-        <FullScreenNowPlaying
+        <ImmersivePlayer
           track={currentTrack}
           playerState={playerState}
           onClose={() => setIsFullScreenOpen(false)}

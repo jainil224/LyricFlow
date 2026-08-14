@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Mic, Play, Pause, ChevronUp, ChevronDown } from 'lucide-react';
 import { Track, PlayerState } from '../types';
-import { getLyricsForTrack, LyricLine } from '../data/lyrics';
+import { getLyricsForTrack, fetchLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
 
 interface LyricsModalProps {
@@ -28,8 +28,19 @@ export function LyricsModal({
 
   // Load lyrics for the active track
   useEffect(() => {
-    const loaded = getLyricsForTrack(track.id, track.title, track.artist);
-    setLyrics(loaded);
+    let isMounted = true;
+    const initial = getLyricsForTrack(track.id, track.title, track.artist);
+    setLyrics(initial);
+
+    fetchLyricsForTrack(track.id).then((loaded) => {
+      if (isMounted && loaded.length > 0) {
+        setLyrics(loaded);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [track.id, track.title, track.artist]);
 
   // Calculate current active lyric line based on playback time
