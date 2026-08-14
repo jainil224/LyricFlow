@@ -239,8 +239,8 @@ export function FullScreenPlayerPage({
             <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
           </button>
 
-          {/* Volume */}
-          <div className="flex items-center gap-1.5 sm:gap-2 text-white/70 pl-3 sm:pl-4 border-l border-white/15">
+          {/* Volume (Desktop only, hidden on phone view) */}
+          <div className="hidden sm:flex items-center gap-1.5 sm:gap-2 text-white/70 pl-3 sm:pl-4 border-l border-white/15">
             <button onClick={onToggleMute} className="hover:text-white transition-colors">
               {playerState.isMuted || playerState.volume === 0 ? (
                 <VolumeX className="w-4 h-4 text-rose-400" />

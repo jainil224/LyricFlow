@@ -334,8 +334,8 @@ export function PlayerDock({
             </button>
           )}
 
-          {/* Volume Control */}
-          <div className="relative">
+          {/* Volume Control (Desktop only, hidden on phone view) */}
+          <div className="hidden sm:block relative">
             <button
               id="volume-btn"
               onClick={() => setShowVolumePopup(!showVolumePopup)}
