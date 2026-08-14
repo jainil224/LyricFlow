@@ -128,7 +128,7 @@ export function LyricsModal({
         {/* Scrollable Karaoke Lyrics Container */}
         <div
           ref={containerRef}
-          className="flex-1 overflow-y-auto px-4 py-8 space-y-4 text-center scrollbar-thin scrollbar-thumb-white/20 hover:scrollbar-thumb-white/40"
+          className="flex-1 overflow-y-auto px-4 py-8 space-y-4 text-center font-montserrat scrollbar-thin scrollbar-thumb-white/20 hover:scrollbar-thumb-white/40"
         >
           {lyrics.map((line, idx) => {
             const isActive = idx === activeIndex;

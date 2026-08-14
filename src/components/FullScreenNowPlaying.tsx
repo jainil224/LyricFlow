@@ -157,7 +157,7 @@ export function FullScreenNowPlaying({
         className="fixed inset-0 z-50 flex flex-col justify-between h-[100dvh] w-screen overflow-hidden bg-[#070709] text-white select-none"
       >
         {/* 1. Animated Color Blob Background (Palette Derived from Cover Art) */}
-        <AnimatedBackground palette={palette} isPlaying={playerState.isPlaying} />
+        <AnimatedBackground palette={palette} coverUrl={track.coverUrl} isPlaying={playerState.isPlaying} />
 
         {/* 2. Top Navigation Bar */}
         <div className="relative z-30 w-full max-w-7xl mx-auto px-6 pt-5 pb-2 flex items-center justify-between shrink-0">

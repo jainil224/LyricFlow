@@ -12,10 +12,9 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
   const primary = palette.primary || track.accentColor || '#a855f7';
   const secondary = palette.secondary || track.accentColor || '#3b82f6';
   const accent = track.accentColor || palette.accent || '#ef4444';
-  const dark = palette.dark || '#070709';
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#070709] pointer-events-none select-none z-0">
+    <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none select-none z-0">
       <AnimatePresence mode="wait">
         <motion.div
           key={track.id}
@@ -25,16 +24,16 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
           transition={{ duration: 1.2, ease: 'easeInOut' }}
           className="absolute inset-0 w-full h-full"
         >
-          {/* Layer 1: High-Fidelity Blurred Cover Artwork Base Layer (Matches Song Banner 100%) */}
+          {/* Layer 1: High-Fidelity Saturated Cover Artwork Base (Matches Song Banner 100%) */}
           <div
-            className="absolute inset-0 bg-cover bg-center filter blur-[70px] opacity-65 scale-125 transition-all duration-1000"
+            className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] opacity-85 scale-125 transition-all duration-1000"
             style={{
               backgroundImage: `url(${track.coverUrl})`,
               transform: `scale(calc(1.25 + var(--bass-energy, 0) * 0.04))`,
             }}
           />
 
-          {/* Layer 2: Primary Color Organic Drifting Orb (18s duration) */}
+          {/* Layer 2: Primary Artwork Color Organic Drifting Glow */}
           <motion.div
             animate={{
               x: ['-15%', '20%', '-10%', '-15%'],
@@ -45,15 +44,14 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-1/4 -left-1/4 w-[700px] h-[700px] sm:w-[950px] sm:h-[950px] rounded-full filter blur-[100px] mix-blend-screen transition-opacity duration-300"
+            className="absolute -top-1/4 -left-1/4 w-[750px] h-[750px] sm:w-[1000px] sm:h-[1000px] rounded-full filter blur-[90px] mix-blend-soft-light transition-opacity duration-300 opacity-60"
             style={{
               backgroundColor: primary,
-              opacity: `calc(0.7 * var(--glow-intensity, 1))`,
               transform: `scale(calc(1 + var(--bass-energy, 0) * 0.06))`,
             }}
           />
 
-          {/* Layer 3: Secondary Color Organic Drifting Orb (24s duration) */}
+          {/* Layer 3: Accent Track Color Organic Drifting Glow */}
           <motion.div
             animate={{
               x: ['15%', '-20%', '10%', '15%'],
@@ -64,45 +62,20 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-1/4 -right-1/4 w-[650px] h-[650px] sm:w-[900px] sm:h-[900px] rounded-full filter blur-[130px] mix-blend-screen transition-opacity duration-300"
+            className="absolute -bottom-1/4 -right-1/4 w-[700px] h-[700px] sm:w-[950px] sm:h-[950px] rounded-full filter blur-[100px] mix-blend-soft-light transition-opacity duration-300 opacity-70"
             style={{
-              backgroundColor: secondary,
-              opacity: `calc(0.6 * var(--glow-intensity, 1))`,
+              backgroundColor: accent,
               transform: `scale(calc(1 + var(--music-energy, 0) * 0.05))`,
             }}
           />
 
-          {/* Layer 4: Accent Color Organic Drifting Orb (31s duration) */}
-          <motion.div
-            animate={{
-              x: ['-20%', '12%', '-10%', '-20%'],
-              y: ['20%', '-12%', '10%', '20%'],
-            }}
-            transition={{
-              duration: 31,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className="absolute -bottom-1/4 left-1/4 w-[750px] h-[750px] sm:w-[1000px] sm:h-[1000px] rounded-full filter blur-[140px] mix-blend-screen transition-opacity duration-300"
-            style={{
-              backgroundColor: accent,
-              opacity: `calc(0.7 * var(--glow-intensity, 1))`,
-              transform: `scale(calc(1 + var(--bass-energy, 0) * 0.08))`,
-            }}
-          />
-
-          {/* Layer 5: Dark Translucent Readability Overlay & Vignette (Section 22 & 23) */}
-          <div
-            className="absolute inset-0 transition-opacity duration-500"
-            style={{
-              background: `radial-gradient(circle at 50% 50%, rgba(7,7,9,0.3) 25%, ${dark || '#070709'} 100%)`,
-            }}
-          />
+          {/* Layer 4: Subtle Top & Bottom Gradient for Clean Readability without muting colors */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/60 pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Layer 6: Film Grain & Noise Overlay for Premium Analog Vibe (Section 24) */}
-      <div className="absolute inset-0 bg-black/35 backdrop-blur-[2px] opacity-90 pointer-events-none" />
+      {/* Layer 5: Soft Vignette & Backdrop Filter */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
     </div>
   );
 }

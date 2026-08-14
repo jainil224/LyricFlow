@@ -37,4 +37,14 @@ html, body, #root {
   background-blend-mode: screen, screen, screen, screen, screen, normal, normal, normal, normal;
 }
 
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+  font-optical-sizing: auto;
+}
+
+.font-montserrat,
+.font-lyrics {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 

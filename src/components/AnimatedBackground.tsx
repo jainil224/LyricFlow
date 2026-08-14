@@ -3,23 +3,33 @@ import { ExtractedColors } from '../utils/colorExtractor';
 
 interface AnimatedBackgroundProps {
   palette: ExtractedColors;
+  coverUrl?: string;
   isPlaying?: boolean;
 }
 
-export function AnimatedBackground({ palette, isPlaying = true }: AnimatedBackgroundProps) {
+export function AnimatedBackground({ palette, coverUrl, isPlaying = true }: AnimatedBackgroundProps) {
   const { primary, secondary, accent, dark } = palette;
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#070709] pointer-events-none select-none z-0">
+    <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none select-none z-0">
       <AnimatePresence mode="wait">
         <motion.div
-          key={`${primary}-${secondary}-${accent}`}
+          key={`${primary}-${secondary}-${accent}-${coverUrl}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2, ease: 'easeInOut' }}
           className="absolute inset-0 w-full h-full"
         >
+          {/* Layer 1: High-Fidelity Cover Artwork Blur Base Layer */}
+          {coverUrl && (
+            <div
+              className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] opacity-85 scale-125 transition-all duration-1000"
+              style={{
+                backgroundImage: `url(${coverUrl})`,
+              }}
+            />
+          )}
           {/* Blob 1: Top Left Drifting Orb */}
           <motion.div
             animate={{

@@ -35,7 +35,7 @@ export function LineMaskSplit({
     return (
       <div
         onClick={onClick}
-        className={`cursor-pointer transition-all duration-500 origin-left ${
+        className={`cursor-pointer transition-all duration-500 origin-left font-montserrat ${
           isPast
             ? 'text-white/35 font-bold text-lg sm:text-2xl leading-tight blur-[0.4px] hover:blur-none hover:text-white/75'
             : 'text-white/45 font-bold text-lg sm:text-2xl leading-tight blur-[0.5px] hover:blur-none hover:text-white/75'
@@ -50,9 +50,9 @@ export function LineMaskSplit({
   return (
     <motion.div
       onClick={onClick}
-      className={`cursor-pointer transition-all duration-300 origin-left text-white font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight select-none ${className}`}
+      className={`cursor-pointer transition-all duration-300 origin-left text-white font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight select-none font-montserrat ${className}`}
       style={{
-        textShadow: `0 0 24px ${accentColor}`,
+        fontFamily: "'Montserrat', sans-serif",
       }}
     >
       <AnimatePresence mode="wait">
