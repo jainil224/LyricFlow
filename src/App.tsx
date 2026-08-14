@@ -152,20 +152,25 @@ export default function App() {
 
   // Real-time zero-latency audio progress subscriber & ticker
   useEffect(() => {
-    // 1. Instant ontimeupdate subscriber for 0ms latency audio sync
-    const unsubscribe = audioEngine.subscribeTime((exactTime) => {
+    // 1. Listen for native audio track end to automatically play next song
+    const unsubscribeEnded = audioEngine.subscribeEnded(() => {
+      handleNextTrack();
+    });
+
+    // 2. Instant ontimeupdate subscriber for 0ms latency audio sync
+    const unsubscribeTime = audioEngine.subscribeTime((exactTime) => {
       setPlayerState((prev) => {
         const track = TRACKS[prev.currentTrackIndex];
         if (exactTime >= track.duration) {
           const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
           audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
-          return { ...prev, currentTrackIndex: nextIdx, progress: 0 };
+          return { ...prev, currentTrackIndex: nextIdx, isPlaying: true, progress: 0 };
         }
         return { ...prev, progress: exactTime };
       });
     });
 
-    // 2. High-frequency 100ms ticker fallback for synthesised tracks
+    // 3. High-frequency 100ms ticker fallback for synthesised tracks
     let interval: number | null = null;
     if (playerState.isPlaying) {
       interval = window.setInterval(() => {
@@ -177,7 +182,7 @@ export default function App() {
           if (nextProgress >= track.duration) {
             const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
             audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
-            return { ...prev, currentTrackIndex: nextIdx, progress: 0 };
+            return { ...prev, currentTrackIndex: nextIdx, isPlaying: true, progress: 0 };
           }
           return { ...prev, progress: nextProgress };
         });
@@ -185,10 +190,11 @@ export default function App() {
     }
 
     return () => {
-      unsubscribe();
+      unsubscribeEnded();
+      unsubscribeTime();
       if (interval) clearInterval(interval);
     };
-  }, [playerState.isPlaying]);
+  }, [playerState.isPlaying, handleNextTrack]);
 
   // Keyboard Shortcuts (Arrow keys to navigate, Space to play/pause)
   useEffect(() => {

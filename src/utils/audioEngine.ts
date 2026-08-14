@@ -16,6 +16,7 @@ class AudioEngine {
   private step: number = 0;
   private beatListeners: Set<BeatListener> = new Set();
   private timeListeners: Set<TimeListener> = new Set();
+  private endedListeners: Set<() => void> = new Set();
   private audioElement: HTMLAudioElement | null = null;
   private analyserNode: AnalyserNode | null = null;
   private hasAudioFileError: boolean = false;
@@ -35,12 +36,23 @@ class AudioEngine {
     };
   }
 
+  public subscribeEnded(listener: () => void) {
+    this.endedListeners.add(listener);
+    return () => {
+      this.endedListeners.delete(listener);
+    };
+  }
+
   private triggerBeat(step: number, isBassBeat: boolean) {
     this.beatListeners.forEach((listener) => listener(step, isBassBeat));
   }
 
   private triggerTime(time: number) {
     this.timeListeners.forEach((listener) => listener(time));
+  }
+
+  private triggerEnded() {
+    this.endedListeners.forEach((listener) => listener());
   }
 
   public initContext() {
@@ -67,6 +79,9 @@ class AudioEngine {
         if (this.audioElement) {
           this.triggerTime(this.audioElement.currentTime);
         }
+      };
+      this.audioElement.onended = () => {
+        this.triggerEnded();
       };
     }
   }
@@ -225,6 +240,9 @@ class AudioEngine {
           if (this.audioElement) {
             this.triggerTime(this.audioElement.currentTime);
           }
+        };
+        this.audioElement.onended = () => {
+          this.triggerEnded();
         };
       }
 
