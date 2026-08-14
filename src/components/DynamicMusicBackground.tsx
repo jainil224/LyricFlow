@@ -59,55 +59,6 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
     };
   }, [track.id, track.coverUrl]);
 
-  // Real-time audio beat reactivity (vivid glow-up on every beat)
-  useEffect(() => {
-    if (!isPlaying) {
-      beatIntensityRef.current = 0;
-      if (containerRef.current) {
-        containerRef.current.style.setProperty('--beat-scale', '1');
-        containerRef.current.style.setProperty('--beat-brightness', '1');
-        containerRef.current.style.setProperty('--beat-glow-opacity', '0');
-      }
-      return;
-    }
-
-    const unsubscribe = audioEngine.subscribeBeat((_step, isBassBeat) => {
-      // Vivid pulse intensity on beat hit
-      beatIntensityRef.current = isBassBeat ? 1.0 : 0.65;
-    });
-
-    let lastTime = performance.now();
-    const updateLoop = (now: number) => {
-      const delta = (now - lastTime) / 1000;
-      lastTime = now;
-
-      if (beatIntensityRef.current > 0.001) {
-        beatIntensityRef.current = Math.max(0, beatIntensityRef.current - delta * 3.2);
-      } else {
-        beatIntensityRef.current = 0;
-      }
-
-      if (containerRef.current) {
-        const scaleVal = 1 + beatIntensityRef.current * 0.045; // 4.5% scale pulse
-        const brightVal = 1 + beatIntensityRef.current * 0.40; // Up to 40% glow brightness boost
-        const glowOpacity = (beatIntensityRef.current * 0.65).toFixed(3);
-
-        containerRef.current.style.setProperty('--beat-scale', scaleVal.toFixed(4));
-        containerRef.current.style.setProperty('--beat-brightness', brightVal.toFixed(4));
-        containerRef.current.style.setProperty('--beat-glow-opacity', glowOpacity);
-      }
-
-      animFrameRef.current = requestAnimationFrame(updateLoop);
-    };
-
-    animFrameRef.current = requestAnimationFrame(updateLoop);
-
-    return () => {
-      unsubscribe();
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [isPlaying]);
-
   return (
     <div
       ref={containerRef}
@@ -117,9 +68,6 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
         '--bg-secondary': colors.secondary,
         '--bg-accent': colors.accent,
         '--bg-dark': colors.dark,
-        '--beat-scale': '1',
-        '--beat-brightness': '1',
-        '--beat-glow-opacity': '0',
       } as Record<string, string>}
     >
       {/* 1. Heavy Blurred Cover Artwork Layer (Previous Image during Crossfade) */}
@@ -138,8 +86,6 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
         style={{
           backgroundImage: `url(${currentCoverUrl})`,
           opacity: 0.82,
-          transform: `scale(calc(1.25 * var(--beat-scale)))`,
-          filter: `blur(55px) saturate(1.45) contrast(1.1) brightness(var(--beat-brightness))`,
         }}
       />
 
@@ -152,39 +98,10 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
             radial-gradient(circle at 75% 35%, var(--bg-secondary), transparent 55%),
             radial-gradient(circle at 50% 85%, var(--bg-accent), transparent 60%)
           `,
-          transform: `scale(var(--beat-scale))`,
-          filter: `brightness(var(--beat-brightness))`,
         }}
       />
 
-      {/* 4. Beat Glow-Up Vivid Pulse Center Orb */}
-      <div
-        className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-100"
-        style={{
-          opacity: isPlaying ? 'var(--beat-glow-opacity)' : '0',
-        }}
-      >
-        <div
-          className="w-[850px] h-[850px] rounded-full blur-3xl transition-transform duration-75"
-          style={{
-            background: `radial-gradient(circle, var(--bg-accent) 0%, var(--bg-primary) 60%, transparent 100%)`,
-            transform: `scale(calc(1.15 * var(--beat-scale)))`,
-            mixBlendMode: 'screen',
-          }}
-        />
-      </div>
-
-      {/* 5. Beat Flare Corner Flash Overlays */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-100"
-        style={{
-          opacity: isPlaying ? 'var(--beat-glow-opacity)' : '0',
-          background: `radial-gradient(circle at 50% 0%, var(--bg-accent) 0%, transparent 70%)`,
-          mixBlendMode: 'lighten',
-        }}
-      />
-
-      {/* 6. Subtle UI Protection Vignette */}
+      {/* 4. Subtle UI Protection Vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 pointer-events-none" />
 
       {/* 6. Main Music Player UI Content (CoverFlow + PlayerDock) */}

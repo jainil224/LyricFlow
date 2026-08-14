@@ -29,7 +29,6 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
             className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] opacity-85 scale-125 transition-all duration-1000"
             style={{
               backgroundImage: `url(${track.coverUrl})`,
-              transform: `scale(calc(1.25 + var(--bass-energy, 0) * 0.04))`,
             }}
           />
 
@@ -47,7 +46,6 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
             className="absolute -top-1/4 -left-1/4 w-[750px] h-[750px] sm:w-[1000px] sm:h-[1000px] rounded-full filter blur-[90px] mix-blend-soft-light transition-opacity duration-300 opacity-60"
             style={{
               backgroundColor: primary,
-              transform: `scale(calc(1 + var(--bass-energy, 0) * 0.06))`,
             }}
           />
 

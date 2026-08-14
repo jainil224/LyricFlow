@@ -8,6 +8,7 @@ import { SongListDrawer } from './components/SongListDrawer';
 import { LyricsModal } from './components/LyricsModal';
 import { LiveLyricsSideCard } from './components/LiveLyricsSideCard';
 import { ImmersivePlayer } from './components/ImmersivePlayer/ImmersivePlayer';
+import { LiveListenerCounter } from './components/LiveListenerCounter';
 import { PlayerState } from './types';
 import { audioEngine } from './utils/audioEngine';
 
@@ -17,9 +18,9 @@ export default function App() {
   const [isLyricsOpen, setIsLyricsOpen] = useState<boolean>(false);
   const [isFullScreenOpen, setIsFullScreenOpen] = useState<boolean>(false);
   const [playerState, setPlayerState] = useState<PlayerState>({
-    currentTrackIndex: 2, // Default to Charlie Puth - How Long (center card in reference image)
+    currentTrackIndex: 3, // Default to Prateek Kuhad - CO2 for all first-time visitors
     isPlaying: false,
-    progress: 42,
+    progress: 0,
     volume: 0.8,
     isMuted: false,
     isAirplayActive: false,
@@ -233,12 +234,16 @@ export default function App() {
           </div>
         </div>
 
-        {/* Top Center: Creator Branding Badge */}
-        <div className="hidden md:flex items-center gap-2 bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300 group hover:border-purple-500/50">
-          <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
-          <span className="text-[11px] font-semibold text-white/90 tracking-wide">
-            Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
-          </span>
+        {/* Top Center: Live Listener Counter & Creator Branding Badge */}
+        <div className="flex items-center gap-3">
+          <LiveListenerCounter trackId={currentTrack.id} />
+
+          <div className="hidden lg:flex items-center gap-2 bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300 group hover:border-purple-500/50">
+            <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
+            <span className="text-[11px] font-semibold text-white/90 tracking-wide">
+              Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
+            </span>
+          </div>
         </div>
 
         {/* Top Right Corner: Full Screen Player Page Button */}

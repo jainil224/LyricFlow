@@ -19,6 +19,7 @@ import { getLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
 import { AnimatedBackground } from './AnimatedBackground';
 import { LineMaskSplit } from './LineMaskSplit';
+import { LiveListenerCounter } from './LiveListenerCounter';
 
 interface FullScreenNowPlayingProps {
   track: Track;
@@ -178,6 +179,8 @@ export function FullScreenNowPlaying({
               </span>
             </div>
             <span className="text-white/30">•</span>
+            <LiveListenerCounter trackId={track.id} variant="compact" />
+            <span className="hidden sm:inline text-white/30">•</span>
             <div className="hidden sm:flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/15 px-3 py-1 rounded-full">
               <Sparkles className="w-3 h-3 text-purple-400 animate-pulse" />
               <span className="text-[11px] font-semibold text-white/90">
