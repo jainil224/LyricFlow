@@ -1,6 +1,6 @@
 {
-  "name": "Cover Flow Music Player",
-  "description": "An interactive 3D cover flow music player hero with frosted glass cards and floating dock.",
+  "name": "LyricFlow Cover Flow Music Player",
+  "description": "An interactive 3D cover flow music player hero with frosted glass cards and dynamic music lighting.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }

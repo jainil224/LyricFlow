@@ -1,20 +1,22 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# LyricFlow — Cover Flow Music Player
 
-# Run and deploy your AI Studio app
+Stream the best in English music with LyricFlow. An interactive 3D Cover Flow music player featuring real-time audio playback, dynamic beat-reactive lighting, and high-resolution album cover art.
 
-This contains everything you need to run your app locally.
+## ✨ Features
+- **3D Cover Flow Carousel**: Interactive album cover carousel.
+- **Dynamic Music Background**: Beat-reactive lighting that automatically extracts album cover color palettes.
+- **Official 600x600 Cover Art**: Programmatically fetched high-res album covers from iTunes.
+- **Song Library Drawer**: Full song search and instant playback drawer.
+- **Real-Time Clock Widget**: Glassmorphic digital clock widget.
 
-View your app in AI Studio: https://ai.studio/apps/6572754c-d598-48fb-84a9-3a51d8d785cd
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+## 🚀 Running Locally
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```bash
+   npm install
+   ```
+
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
