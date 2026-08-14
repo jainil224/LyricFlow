@@ -63,7 +63,6 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
             className="absolute -bottom-1/4 -right-1/4 w-[700px] h-[700px] sm:w-[950px] sm:h-[950px] rounded-full filter blur-[100px] mix-blend-soft-light transition-opacity duration-300 opacity-70"
             style={{
               backgroundColor: accent,
-              transform: `scale(calc(1 + var(--music-energy, 0) * 0.05))`,
             }}
           />
 
