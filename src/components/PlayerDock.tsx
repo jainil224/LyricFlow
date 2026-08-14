@@ -129,248 +129,331 @@ export function PlayerDock({
       {/* High-Contrast Glassmorphic Pill Dock */}
       <div
         id="player-dock-pill"
-        className="pointer-events-auto w-full bg-stone-950/95 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1 sm:gap-4 transition-all duration-300"
+        className="pointer-events-auto w-full bg-stone-950/95 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 transition-all duration-300"
       >
-        {/* Left Side: Playback Controls */}
-        <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
+        {/* MOBILE PHONE VIEW LAYOUT (Album Cover on Left, Play Controls Centered, Action Icons on Right) */}
+        <div className="flex sm:hidden items-center justify-between w-full px-1">
+          {/* Mobile Left: Album Cover Image Only */}
           <button
-            id="prev-track-btn"
-            onClick={onPrevTrack}
-            className="p-1 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
-            title="Previous Track"
+            onClick={() => (onOpenFullScreen ? onOpenFullScreen() : onOpenLibrary?.())}
+            className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-white/20 relative shadow-md active:scale-95 transition-transform"
+            title="Open Full Screen Player"
           >
-            <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-          </button>
-
-          <button
-            id="play-pause-btn"
-            onClick={onTogglePlay}
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-white/20 focus:outline-none shrink-0"
-            title={playerState.isPlaying ? 'Pause' : 'Play'}
-          >
-            {playerState.isPlaying ? (
-              <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-            ) : (
-              <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
-            )}
-          </button>
-
-          <button
-            id="next-track-btn"
-            onClick={onNextTrack}
-            className="p-1 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
-            title="Next Track"
-          >
-            <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-          </button>
-        </div>
-
-        {/* Center: Sleek Embedded Mini Track Info & Scrub Bar */}
-        <div
-          id="center-mini-player-pill"
-          className="group flex-1 min-w-[95px] max-w-[240px] sm:max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl px-1.5 py-1 sm:px-3 sm:py-1.5 flex items-center justify-between gap-1.5 sm:gap-2 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
-        >
-          {/* Mini Album Cover & Track Text Info - Click to Open Full Screen */}
-          <button
-            onClick={() => {
-              if (onOpenFullScreen) {
-                onOpenFullScreen();
-              } else {
-                onOpenLibrary?.();
-              }
-            }}
-            className="flex-1 flex items-center gap-1.5 sm:gap-2.5 min-w-0 text-left cursor-pointer hover:opacity-90 transition-opacity"
-            title="Click to view full screen lyrics page"
-          >
-            <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-white/20 relative shadow-sm">
-              <img
-                src={currentTrack.coverUrl}
-                alt={currentTrack.title}
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = getUniqueFallbackCover(currentTrack);
-                }}
-              />
-            </div>
-
-            <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <span className="text-white font-semibold text-[10px] sm:text-sm leading-tight truncate">
-                {currentTrack.artist}{currentTrack.featuredArtist ? ` ft. ${currentTrack.featuredArtist}` : ''}
-              </span>
-              <span className="text-white/70 text-[9px] sm:text-xs leading-tight truncate">
-                {currentTrack.title}{currentTrack.version ? ` (${currentTrack.version})` : ''}
-              </span>
-            </div>
-          </button>
-
-          {/* Equalizer soundwave animation & Options */}
-          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 relative">
-            {playerState.isPlaying ? (
-              <div className="flex items-end gap-[2px] sm:gap-[3px] h-3 sm:h-3.5 px-0.5">
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-2.5 sm:h-3" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-1.5 sm:h-2" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.5s_ease-in-out_infinite] h-3 sm:h-3.5" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite] h-2 sm:h-2.5" />
-              </div>
-            ) : (
-              <div className="flex items-end gap-[2px] sm:gap-[3px] h-3 sm:h-3.5 px-0.5 opacity-50">
-                <span className="w-0.5 bg-white/70 rounded-full h-1.5 sm:h-2" />
-                <span className="w-0.5 bg-white/70 rounded-full h-1" />
-                <span className="w-0.5 bg-white/70 rounded-full h-1.5 sm:h-2" />
-                <span className="w-0.5 bg-white/70 rounded-full h-1" />
-              </div>
-            )}
-
-            <button
-              id="song-details-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowSongDetailsModal(!showSongDetailsModal);
+            <img
+              src={currentTrack.coverUrl}
+              alt={currentTrack.title}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = getUniqueFallbackCover(currentTrack);
               }}
-              className="p-0.5 sm:p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
-              title="Song Details & Options"
+            />
+          </button>
+
+          {/* Mobile Center: Playback Controls (SkipBack, Play/Pause, SkipForward) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              id="prev-track-btn-mobile"
+              onClick={onPrevTrack}
+              className="p-1.5 text-white/80 hover:text-white active:scale-95 transition-all rounded-full focus:outline-none"
+              title="Previous Track"
             >
-              <MoreHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <SkipBack className="w-4 h-4 fill-current" />
             </button>
 
-            {/* Song Details Popover */}
-            {showSongDetailsModal && (
-              <div
-                id="song-details-popover"
-                className="absolute bottom-10 -right-8 xs:right-0 w-56 sm:w-60 bg-stone-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
-              >
-                <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
-                  <img
-                    src={currentTrack.coverUrl}
-                    alt={currentTrack.title}
-                    className="w-9 h-9 rounded-lg object-cover border border-white/15"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = getUniqueFallbackCover(currentTrack);
-                    }}
-                  />
-                  <div className="flex-1 min-w-0 text-left">
-                    <h4 className="text-xs font-bold truncate text-white">{currentTrack.title}</h4>
-                    <p className="text-[11px] text-white/60 truncate">{currentTrack.artist}</p>
-                  </div>
-                </div>
-
-                <div className="py-2 space-y-1 text-[11px] text-white/70">
-                  <div className="flex justify-between">
-                    <span className="text-white/40">Album:</span>
-                    <span className="font-medium text-white truncate max-w-[120px]">{currentTrack.album}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/40">Label:</span>
-                    <span className="font-medium text-amber-300">{currentTrack.badge || 'Indie'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/40">Tempo:</span>
-                    <span className="font-mono text-white/90">{currentTrack.bpm} BPM</span>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-white/10">
-                  <button
-                    onClick={() => {
-                      setShowSongDetailsModal(false);
-                      onOpenLibrary?.();
-                    }}
-                    className="w-full py-1.5 px-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 font-medium text-xs text-left transition flex items-center justify-between"
-                  >
-                    <span>View All 21 Songs</span>
-                    <ListMusic className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Interactive Drag & Seek Scrub Line (Move Forward & Backward) */}
-          <div
-            ref={progressBarRef}
-            onMouseDown={handleScrubMouseDown}
-            onTouchStart={handleScrubTouchStart}
-            className="absolute bottom-0 left-0 right-0 h-2.5 bg-white/10 hover:bg-white/20 cursor-pointer group/scrub flex items-center transition-all z-20"
-            title="Click or drag to move forward & backward in song"
-          >
-            <div
-              className="h-1 group-hover/scrub:h-1.5 bg-gradient-to-r from-amber-400 via-rose-400 to-amber-300 rounded-full transition-all relative flex items-center"
-              style={{ width: `${progressPercent}%` }}
-            >
-              <div
-                className={`absolute -right-1.5 w-3.5 h-3.5 rounded-full bg-white shadow-md border border-amber-400 transition-all ${
-                  isScrubbing ? 'scale-125 opacity-100' : 'opacity-0 group-hover/scrub:opacity-100'
-                }`}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side: FullScreen, Lyrics, Song Library & Volume */}
-        <div className="flex items-center gap-0.5 sm:gap-2 text-white/80 shrink-0">
-          {/* Full Screen Dedicated Player Page Button */}
-          {onOpenFullScreen && (
             <button
-              id="fullscreen-page-btn"
-              onClick={onOpenFullScreen}
-              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 text-white/80 hover:text-emerald-400 hover:bg-white/10"
-              title="Open Full Screen Player & Lyrics Page"
+              id="play-pause-btn-mobile"
+              onClick={onTogglePlay}
+              className="w-9 h-9 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-white/20 focus:outline-none shrink-0"
+              title={playerState.isPlaying ? 'Pause' : 'Play'}
             >
-              <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-          )}
-
-          {/* Song Library Drawer Button */}
-          {onOpenLibrary && (
-            <button
-              id="song-library-btn"
-              onClick={onOpenLibrary}
-              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 text-white/80 hover:text-amber-400 hover:bg-white/10"
-              title="View All Songs & Cover Art"
-            >
-              <ListMusic className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-          )}
-
-          {/* Volume Control (Desktop only, hidden on phone view) */}
-          <div className="hidden sm:block relative">
-            <button
-              id="volume-btn"
-              onClick={() => setShowVolumePopup(!showVolumePopup)}
-              onDoubleClick={onToggleMute}
-              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10"
-              title="Volume control (Double click to mute)"
-            >
-              {playerState.isMuted || playerState.volume === 0 ? (
-                <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
+              {playerState.isPlaying ? (
+                <Pause className="w-4 h-4 fill-current" />
               ) : (
-                <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Play className="w-4 h-4 fill-current ml-0.5" />
               )}
             </button>
 
-            {/* Volume Popover Slider */}
-            {showVolumePopup && (
-              <div
-                id="volume-popover"
-                className="absolute bottom-14 right-0 w-40 sm:w-44 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+            <button
+              id="next-track-btn-mobile"
+              onClick={onNextTrack}
+              className="p-1.5 text-white/80 hover:text-white active:scale-95 transition-all rounded-full focus:outline-none"
+              title="Next Track"
+            >
+              <SkipForward className="w-4 h-4 fill-current" />
+            </button>
+          </div>
+
+          {/* Mobile Right: Full Screen & Library Buttons */}
+          <div className="flex items-center gap-0.5 text-white/80 shrink-0">
+            {onOpenFullScreen && (
+              <button
+                id="fullscreen-page-btn-mobile"
+                onClick={onOpenFullScreen}
+                className="p-1.5 rounded-full transition-all text-white/80 hover:text-emerald-400 hover:bg-white/10"
+                title="Open Full Screen Player"
               >
-                <div className="flex items-center justify-between text-xs text-white/70 mb-2">
-                  <span>Volume</span>
-                  <span className="font-mono">{Math.round(playerState.isMuted ? 0 : playerState.volume * 100)}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={playerState.isMuted ? 0 : playerState.volume}
-                  onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-                  className="w-full accent-rose-400 bg-white/20 h-1.5 rounded-lg cursor-pointer"
+                <Maximize2 className="w-4 h-4" />
+              </button>
+            )}
+
+            {onOpenLibrary && (
+              <button
+                id="song-library-btn-mobile"
+                onClick={onOpenLibrary}
+                className="p-1.5 rounded-full transition-all text-white/80 hover:text-amber-400 hover:bg-white/10"
+                title="View All Songs"
+              >
+                <ListMusic className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* DESKTOP LAYOUT (Left Playback Controls, Center Track Info Pill, Right Fullscreen/Library/Volume) */}
+        <div className="hidden sm:flex items-center justify-between gap-4 w-full">
+          {/* Left Side: Playback Controls */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              id="prev-track-btn"
+              onClick={onPrevTrack}
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+              title="Previous Track"
+            >
+              <SkipBack className="w-5 h-5 fill-current" />
+            </button>
+
+            <button
+              id="play-pause-btn"
+              onClick={onTogglePlay}
+              className="w-11 h-11 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-white/20 focus:outline-none shrink-0"
+              title={playerState.isPlaying ? 'Pause' : 'Play'}
+            >
+              {playerState.isPlaying ? (
+                <Pause className="w-5 h-5 fill-current" />
+              ) : (
+                <Play className="w-5 h-5 fill-current ml-0.5" />
+              )}
+            </button>
+
+            <button
+              id="next-track-btn"
+              onClick={onNextTrack}
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+              title="Next Track"
+            >
+              <SkipForward className="w-5 h-5 fill-current" />
+            </button>
+          </div>
+
+          {/* Center: Sleek Embedded Mini Track Info & Scrub Bar */}
+          <div
+            id="center-mini-player-pill"
+            className="group flex-1 max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-2xl px-3 py-1.5 flex items-center justify-between gap-2 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
+          >
+            {/* Mini Album Cover & Track Text Info - Click to Open Full Screen */}
+            <button
+              onClick={() => {
+                if (onOpenFullScreen) {
+                  onOpenFullScreen();
+                } else {
+                  onOpenLibrary?.();
+                }
+              }}
+              className="flex-1 flex items-center gap-2.5 min-w-0 text-left cursor-pointer hover:opacity-90 transition-opacity"
+              title="Click to view full screen lyrics page"
+            >
+              <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 border border-white/20 relative shadow-sm">
+                <img
+                  src={currentTrack.coverUrl}
+                  alt={currentTrack.title}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = getUniqueFallbackCover(currentTrack);
+                  }}
                 />
               </div>
+
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <span className="text-white font-semibold text-sm leading-tight truncate">
+                  {currentTrack.artist}{currentTrack.featuredArtist ? ` ft. ${currentTrack.featuredArtist}` : ''}
+                </span>
+                <span className="text-white/70 text-xs leading-tight truncate">
+                  {currentTrack.title}{currentTrack.version ? ` (${currentTrack.version})` : ''}
+                </span>
+              </div>
+            </button>
+
+            {/* Equalizer soundwave animation & Options */}
+            <div className="flex items-center gap-1.5 shrink-0 relative">
+              {playerState.isPlaying ? (
+                <div className="flex items-end gap-[3px] h-3.5 px-0.5">
+                  <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-3" />
+                  <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-2" />
+                  <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.5s_ease-in-out_infinite] h-3.5" />
+                  <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite] h-2.5" />
+                </div>
+              ) : (
+                <div className="flex items-end gap-[3px] h-3.5 px-0.5 opacity-50">
+                  <span className="w-0.5 bg-white/70 rounded-full h-2" />
+                  <span className="w-0.5 bg-white/70 rounded-full h-1" />
+                  <span className="w-0.5 bg-white/70 rounded-full h-2" />
+                  <span className="w-0.5 bg-white/70 rounded-full h-1.5" />
+                </div>
+              )}
+
+              <button
+                id="song-details-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSongDetailsModal(!showSongDetailsModal);
+                }}
+                className="p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                title="Song Details & Options"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+
+              {/* Song Details Popover */}
+              {showSongDetailsModal && (
+                <div
+                  id="song-details-popover"
+                  className="absolute bottom-10 right-0 w-60 bg-stone-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+                    <img
+                      src={currentTrack.coverUrl}
+                      alt={currentTrack.title}
+                      className="w-9 h-9 rounded-lg object-cover border border-white/15"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = getUniqueFallbackCover(currentTrack);
+                      }}
+                    />
+                    <div className="flex-1 min-w-0 text-left">
+                      <h4 className="text-xs font-bold truncate text-white">{currentTrack.title}</h4>
+                      <p className="text-[11px] text-white/60 truncate">{currentTrack.artist}</p>
+                    </div>
+                  </div>
+
+                  <div className="py-2 space-y-1 text-[11px] text-white/70">
+                    <div className="flex justify-between">
+                      <span className="text-white/40">Album:</span>
+                      <span className="font-medium text-white truncate max-w-[120px]">{currentTrack.album}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/40">Label:</span>
+                      <span className="font-medium text-amber-300">{currentTrack.badge || 'Indie'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/40">Tempo:</span>
+                      <span className="font-mono text-white/90">{currentTrack.bpm} BPM</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-white/10">
+                    <button
+                      onClick={() => {
+                        setShowSongDetailsModal(false);
+                        onOpenLibrary?.();
+                      }}
+                      className="w-full py-1.5 px-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 font-medium text-xs text-left transition flex items-center justify-between"
+                    >
+                      <span>View All 21 Songs</span>
+                      <ListMusic className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Interactive Drag & Seek Scrub Line (Move Forward & Backward) */}
+            <div
+              ref={progressBarRef}
+              onMouseDown={handleScrubMouseDown}
+              onTouchStart={handleScrubTouchStart}
+              className="absolute bottom-0 left-0 right-0 h-2.5 bg-white/10 hover:bg-white/20 cursor-pointer group/scrub flex items-center transition-all z-20"
+              title="Click or drag to move forward & backward in song"
+            >
+              <div
+                className="h-1 group-hover/scrub:h-1.5 bg-gradient-to-r from-amber-400 via-rose-400 to-amber-300 rounded-full transition-all relative flex items-center"
+                style={{ width: `${progressPercent}%` }}
+              >
+                <div
+                  className={`absolute -right-1.5 w-3.5 h-3.5 rounded-full bg-white shadow-md border border-amber-400 transition-all ${
+                    isScrubbing ? 'scale-125 opacity-100' : 'opacity-0 group-hover/scrub:opacity-100'
+                  }`}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: FullScreen, Lyrics, Song Library & Volume */}
+          <div className="flex items-center gap-2 text-white/80 shrink-0">
+            {/* Full Screen Dedicated Player Page Button */}
+            {onOpenFullScreen && (
+              <button
+                id="fullscreen-page-btn"
+                onClick={onOpenFullScreen}
+                className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-emerald-400 hover:bg-white/10"
+                title="Open Full Screen Player & Lyrics Page"
+              >
+                <Maximize2 className="w-5 h-5" />
+              </button>
             )}
+
+            {/* Song Library Drawer Button */}
+            {onOpenLibrary && (
+              <button
+                id="song-library-btn"
+                onClick={onOpenLibrary}
+                className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-amber-400 hover:bg-white/10"
+                title="View All Songs & Cover Art"
+              >
+                <ListMusic className="w-5 h-5" />
+              </button>
+            )}
+
+            {/* Volume Control (Desktop only, hidden on phone view) */}
+            <div className="hidden sm:block relative">
+              <button
+                id="volume-btn"
+                onClick={() => setShowVolumePopup(!showVolumePopup)}
+                onDoubleClick={onToggleMute}
+                className="p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10"
+                title="Volume control (Double click to mute)"
+              >
+                {playerState.isMuted || playerState.volume === 0 ? (
+                  <VolumeX className="w-5 h-5 text-rose-400" />
+                ) : (
+                  <Volume2 className="w-5 h-5" />
+                )}
+              </button>
+
+              {/* Volume Popover Slider */}
+              {showVolumePopup && (
+                <div
+                  id="volume-popover"
+                  className="absolute bottom-14 right-0 w-44 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <div className="flex items-center justify-between text-xs text-white/70 mb-2">
+                    <span>Volume</span>
+                    <span className="font-mono">{Math.round(playerState.isMuted ? 0 : playerState.volume * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={playerState.isMuted ? 0 : playerState.volume}
+                    onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                    className="w-full accent-rose-400 bg-white/20 h-1.5 rounded-lg cursor-pointer"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
