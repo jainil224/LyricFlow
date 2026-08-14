@@ -7,9 +7,10 @@ interface CoverFlowProps {
   tracks: Track[];
   activeIndex: number;
   onSelectTrack: (index: number) => void;
+  onOpenFullScreen?: () => void;
 }
 
-export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps) {
+export function CoverFlow({ tracks, activeIndex, onSelectTrack, onOpenFullScreen }: CoverFlowProps) {
   const [isMobile, setIsMobile] = useState<boolean>(
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
@@ -79,7 +80,13 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps
           <motion.div
             key={track.id}
             id={`coverflow-card-${track.id}`}
-            onClick={() => onSelectTrack(index)}
+            onClick={() => {
+              if (offset === 0 && onOpenFullScreen) {
+                onOpenFullScreen();
+              } else {
+                onSelectTrack(index);
+              }
+            }}
             initial={false}
             animate={{
               x,

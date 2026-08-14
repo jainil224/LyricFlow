@@ -171,9 +171,15 @@ export function PlayerDock({
         >
           {/* Mini Album Cover & Track Text Info - Click to Open Library */}
           <button
-            onClick={() => onOpenLibrary?.()}
+            onClick={() => {
+              if (onOpenFullScreen) {
+                onOpenFullScreen();
+              } else {
+                onOpenLibrary?.();
+              }
+            }}
             className="flex-1 flex items-center gap-2.5 min-w-0 text-left cursor-pointer hover:opacity-90 transition-opacity"
-            title="Click to view all songs"
+            title="Click to view full screen lyrics page"
           >
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-white/20 relative shadow-sm">
               <img

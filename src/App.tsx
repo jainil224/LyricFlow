@@ -252,25 +252,14 @@ export default function App() {
         </button>
       </header>
 
-      {/* Main Interactive Stage: 3D Cover Flow + Right Side Live Lyrics Card */}
-      <div className="w-full flex-1 flex flex-col xl:flex-row items-center justify-center gap-6 max-w-7xl px-4 relative z-20 py-4">
-        {/* Left/Center: 3D Cover Flow Carousel */}
-        <div className="flex-1 w-full flex items-center justify-center">
-          <CoverFlow
-            tracks={TRACKS}
-            activeIndex={playerState.currentTrackIndex}
-            onSelectTrack={handleSelectTrack}
-          />
-        </div>
-
-        {/* Right Side: Live Synced Lyrics Card */}
-        <div className="shrink-0 flex items-center justify-center">
-          <LiveLyricsSideCard
-            track={currentTrack}
-            playerState={playerState}
-            onSeek={handleSeek}
-          />
-        </div>
+      {/* Main Interactive Stage: Centered 3D Cover Flow Carousel */}
+      <div className="w-full flex-1 flex items-center justify-center max-w-7xl px-4 relative z-20 py-4">
+        <CoverFlow
+          tracks={TRACKS}
+          activeIndex={playerState.currentTrackIndex}
+          onSelectTrack={handleSelectTrack}
+          onOpenFullScreen={() => setIsFullScreenOpen(true)}
+        />
       </div>
 
       {/* Bottom Floating Translucent Player Bar */}
