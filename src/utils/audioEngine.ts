@@ -46,6 +46,13 @@ class AudioEngine {
     return this.audioElement;
   }
 
+  public getCurrentTime(): number | null {
+    if (this.audioElement && !isNaN(this.audioElement.currentTime)) {
+      return this.audioElement.currentTime;
+    }
+    return null;
+  }
+
   public getAnalyserNode(): AnalyserNode | null {
     this.initContext();
     if (!this.ctx) return null;

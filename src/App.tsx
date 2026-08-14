@@ -123,14 +123,17 @@ export default function App() {
     });
   }, []);
 
-  // Progress playback timer
+  // Progress playback timer (Smooth 250ms interval ticker)
   useEffect(() => {
     let interval: number | null = null;
     if (playerState.isPlaying) {
       interval = window.setInterval(() => {
         setPlayerState((prev) => {
           const track = TRACKS[prev.currentTrackIndex];
-          if (prev.progress >= track.duration) {
+          const exactTime = audioEngine.getCurrentTime();
+          const currentProgress = exactTime !== null ? exactTime : prev.progress + 0.25;
+
+          if (currentProgress >= track.duration) {
             // Auto advance next track
             const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
             audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
@@ -142,10 +145,10 @@ export default function App() {
           }
           return {
             ...prev,
-            progress: prev.progress + 1,
+            progress: currentProgress,
           };
         });
-      }, 1000);
+      }, 250);
     }
     return () => {
       if (interval) clearInterval(interval);
