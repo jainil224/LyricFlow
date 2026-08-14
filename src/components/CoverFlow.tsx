@@ -23,7 +23,7 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps
   }, []);
 
   return (
-    <div className="relative w-full max-w-4xl h-[260px] sm:h-[340px] flex items-center justify-center select-none perspective-[1200px] overflow-visible">
+    <div className="relative w-full max-w-4xl h-[270px] sm:h-[350px] flex items-center justify-center select-none perspective-[1400px] overflow-visible">
       {tracks.map((track, index) => {
         const offset = index - activeIndex;
         const isVisible = Math.abs(offset) <= 2;
@@ -41,37 +41,37 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps
         if (offset === 0) {
           x = 0;
           rotateY = 0;
-          z = isMobile ? 30 : 45;
-          scale = isMobile ? 1.02 : 1.05;
+          z = isMobile ? 35 : 55;
+          scale = isMobile ? 1.04 : 1.08;
           opacity = 1;
           zIndex = 30;
         } else if (offset === -1) {
-          x = isMobile ? -95 : -130;
-          rotateY = isMobile ? 24 : 28;
+          x = isMobile ? -95 : -135;
+          rotateY = isMobile ? 26 : 32;
           z = -20;
           scale = isMobile ? 0.82 : 0.86;
           opacity = 0.85;
           zIndex = 20;
         } else if (offset === 1) {
-          x = isMobile ? 95 : 130;
-          rotateY = isMobile ? -24 : -28;
+          x = isMobile ? 95 : 135;
+          rotateY = isMobile ? -26 : -32;
           z = -20;
           scale = isMobile ? 0.82 : 0.86;
           opacity = 0.85;
           zIndex = 20;
         } else if (offset === -2) {
-          x = isMobile ? -170 : -240;
-          rotateY = isMobile ? 38 : 44;
-          z = -70;
+          x = isMobile ? -175 : -245;
+          rotateY = isMobile ? 40 : 48;
+          z = -75;
           scale = isMobile ? 0.65 : 0.72;
-          opacity = 0.6;
+          opacity = 0.55;
           zIndex = 10;
         } else if (offset === 2) {
-          x = isMobile ? 170 : 240;
-          rotateY = isMobile ? -38 : -44;
-          z = -70;
+          x = isMobile ? 175 : 245;
+          rotateY = isMobile ? -40 : -48;
+          z = -75;
           scale = isMobile ? 0.65 : 0.72;
-          opacity = 0.6;
+          opacity = 0.55;
           zIndex = 10;
         }
 
@@ -90,31 +90,31 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack }: CoverFlowProps
             }}
             transition={{
               type: 'spring',
-              stiffness: 260,
-              damping: 24,
+              stiffness: 280,
+              damping: 26,
+              mass: 0.75,
             }}
             style={{
               zIndex,
               transformStyle: 'preserve-3d',
             }}
-            className={`absolute cursor-pointer w-[180px] sm:w-[210px] h-[240px] sm:h-[275px] rounded-2xl p-2 flex flex-col justify-between transition-shadow duration-300
-              ${
-                offset === 0
-                  ? 'bg-gradient-to-b from-white/20 via-white/10 to-white/5 backdrop-blur-2xl border border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.1)]'
-                  : 'bg-white/10 backdrop-blur-lg border border-white/15 shadow-xl hover:border-white/30'
-              }`}
+            className={`absolute cursor-pointer w-[185px] sm:w-[215px] h-[245px] sm:h-[280px] rounded-2xl p-2 flex flex-col justify-between transition-all duration-300 ${
+              offset === 0
+                ? 'bg-gradient-to-b from-white/25 via-white/15 to-white/5 backdrop-blur-2xl border-2 border-white/40 shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.09]'
+                : 'bg-white/10 backdrop-blur-lg border border-white/15 shadow-xl hover:border-white/30 hover:opacity-95'
+            }`}
           >
             {/* Top Album Art Box */}
-            <div className="w-full h-[160px] sm:h-[185px] relative rounded-xl overflow-hidden shadow-inner">
+            <div className="w-full h-[165px] sm:h-[190px] relative rounded-xl overflow-visible">
               <CardArt track={track} isActive={offset === 0} />
             </div>
 
             {/* Bottom Frosted Glass Info Area */}
-            <div className="pt-1.5 pb-0.5 px-1 text-center flex flex-col items-center justify-center">
-              <h3 className="text-white font-semibold text-xs sm:text-sm tracking-wide truncate max-w-full drop-shadow-md">
+            <div className="pt-2 pb-1 px-1.5 text-center flex flex-col items-center justify-center">
+              <h3 className="text-white font-bold text-xs sm:text-sm tracking-wide truncate max-w-full drop-shadow-md">
                 {track.artist}{track.featuredArtist ? ` ft. ${track.featuredArtist}` : ''}
               </h3>
-              <p className="text-white/70 text-[11px] sm:text-xs font-normal tracking-wide truncate max-w-full">
+              <p className="text-white/75 text-[11px] sm:text-xs font-normal tracking-wide truncate max-w-full">
                 {track.title}
               </p>
             </div>
