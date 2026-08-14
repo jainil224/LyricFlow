@@ -127,11 +127,11 @@ export function FullScreenPlayerPage({
       </div>
 
       {/* 3. Main Split Stage (Left Artwork + Controls | Right Floating Live Synced Lyrics) */}
-      <div className="relative z-20 flex-1 w-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 overflow-hidden py-2">
+      <div className="relative z-20 flex-1 w-full max-w-7xl mx-auto px-4 sm:px-12 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-16 overflow-hidden py-1 sm:py-2">
         {/* Left Side: Large Album Sleeve & Integrated Scrub Bar (Matching Reference Screenshot) */}
-        <div className="flex flex-col items-start gap-4 shrink-0 w-full sm:w-[320px] lg:w-[360px]">
+        <div className="flex flex-col items-center lg:items-start gap-2 sm:gap-4 shrink-0 w-full sm:w-[320px] lg:w-[360px]">
           {/* Prominent Square Album Artwork */}
-          <div className="w-full aspect-square rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group">
+          <div className="w-44 h-44 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-[360px] lg:h-[360px] aspect-square rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group mx-auto lg:mx-0 shrink-0">
             <img
               src={track.coverUrl}
               alt={track.title}
@@ -141,14 +141,14 @@ export function FullScreenPlayerPage({
               }}
             />
             {track.badge && (
-              <span className="absolute top-3 left-3 text-[10px] font-bold tracking-widest text-white uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-md">
+              <span className="absolute top-2.5 left-2.5 text-[9px] sm:text-[10px] font-bold tracking-widest text-white uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-md">
                 {track.badge}
               </span>
             )}
           </div>
 
           {/* Integrated Scrub Bar & Song Info directly under Album Sleeve (Exact Image Match) */}
-          <div className="w-full space-y-1.5 pt-1">
+          <div className="w-full max-w-[280px] sm:max-w-full space-y-1 pt-0.5 sm:pt-1">
             {/* Progress line */}
             <div
               ref={progressBarRef}
@@ -163,14 +163,14 @@ export function FullScreenPlayerPage({
             </div>
 
             {/* Timestamps */}
-            <div className="flex justify-between text-[11px] font-mono text-white/60">
+            <div className="flex justify-between text-[10px] sm:text-[11px] font-mono text-white/60">
               <span>{formattedCurrent}</span>
               <span>{formattedRemaining}</span>
             </div>
 
             {/* Song Title & Album Description */}
-            <div className="flex flex-col text-left pt-0.5">
-              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight truncate drop-shadow">
+            <div className="flex flex-col text-center lg:text-left pt-0.5">
+              <h3 className="text-sm sm:text-lg font-bold text-white tracking-tight truncate drop-shadow">
                 {track.title} ({track.album})
               </h3>
               <p className="text-xs font-medium text-white/70 truncate">
@@ -181,10 +181,10 @@ export function FullScreenPlayerPage({
         </div>
 
         {/* Right Side: Floating Live Synced Lyrics (Matching Reference Screenshot Right Side) */}
-        <div className="flex-1 w-full h-full max-h-[460px] flex flex-col justify-center overflow-hidden relative">
+        <div className="flex-1 w-full h-full max-h-[200px] xs:max-h-[260px] sm:max-h-[360px] lg:max-h-[460px] flex flex-col justify-center overflow-hidden relative">
           <div
             ref={containerRef}
-            className="flex-1 overflow-y-auto px-2 py-8 space-y-6 text-left scrollbar-none"
+            className="flex-1 overflow-y-auto px-2 py-4 sm:py-8 space-y-4 sm:space-y-6 text-center lg:text-left scrollbar-none"
           >
             {lyrics.map((line, idx) => {
               const isActive = idx === activeIndex;
@@ -194,10 +194,10 @@ export function FullScreenPlayerPage({
                   key={idx}
                   ref={(el) => (lineRefs.current[idx] = el)}
                   onClick={() => onSeek(line.time)}
-                  className={`cursor-pointer transition-all duration-500 select-none origin-left ${
+                  className={`cursor-pointer transition-all duration-500 select-none origin-center lg:origin-left ${
                     isActive
-                      ? 'text-white font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight drop-shadow-[0_4px_20px_rgba(255,255,255,0.6)] scale-[1.03] opacity-100'
-                      : 'text-white/35 font-bold text-lg sm:text-2xl leading-tight blur-[0.5px] hover:blur-none hover:text-white/75 transition-all duration-300'
+                      ? 'text-white font-extrabold text-lg xs:text-2xl sm:text-3xl lg:text-4xl leading-tight drop-shadow-[0_4px_20px_rgba(255,255,255,0.6)] scale-[1.02] opacity-100'
+                      : 'text-white/35 font-bold text-sm sm:text-2xl leading-tight blur-[0.5px] hover:blur-none hover:text-white/75 transition-all duration-300'
                   }`}
                 >
                   <p>{line.text}</p>
@@ -209,25 +209,25 @@ export function FullScreenPlayerPage({
       </div>
 
       {/* 4. Bottom Tactile Floating Controls Dock */}
-      <div className="relative z-30 w-full max-w-xl mx-auto pb-6 sm:pb-8 px-4 shrink-0 flex justify-center">
-        <div className="bg-stone-950/80 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-2 flex items-center justify-between gap-6 shadow-2xl">
+      <div className="relative z-30 w-full max-w-xl mx-auto pb-4 sm:pb-8 px-4 shrink-0 flex justify-center pb-safe">
+        <div className="bg-stone-950/80 backdrop-blur-2xl border border-white/20 rounded-full px-4 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-3 sm:gap-6 shadow-2xl">
           <button
             onClick={onPrevTrack}
             className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all"
             title="Previous Track"
           >
-            <SkipBack className="w-5 h-5 fill-current" />
+            <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
           </button>
 
           <button
             onClick={onTogglePlay}
-            className="w-10 h-10 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-white/20"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-white/20"
             title={playerState.isPlaying ? 'Pause' : 'Play'}
           >
             {playerState.isPlaying ? (
-              <Pause className="w-5 h-5 fill-current" />
+              <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             ) : (
-              <Play className="w-5 h-5 fill-current ml-0.5" />
+              <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
             )}
           </button>
 
@@ -236,11 +236,11 @@ export function FullScreenPlayerPage({
             className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all"
             title="Next Track"
           >
-            <SkipForward className="w-5 h-5 fill-current" />
+            <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
           </button>
 
           {/* Volume */}
-          <div className="flex items-center gap-2 text-white/70 pl-4 border-l border-white/15">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-white/70 pl-3 sm:pl-4 border-l border-white/15">
             <button onClick={onToggleMute} className="hover:text-white transition-colors">
               {playerState.isMuted || playerState.volume === 0 ? (
                 <VolumeX className="w-4 h-4 text-rose-400" />
@@ -255,7 +255,7 @@ export function FullScreenPlayerPage({
               step="0.01"
               value={playerState.isMuted ? 0 : playerState.volume}
               onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className="w-20 sm:w-24 accent-white bg-white/20 h-1 rounded-lg cursor-pointer"
+              className="w-14 xs:w-20 sm:w-24 accent-white bg-white/20 h-1 rounded-lg cursor-pointer"
             />
             <Volume2 className="w-4 h-4" />
           </div>

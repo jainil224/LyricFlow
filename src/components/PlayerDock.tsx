@@ -125,18 +125,18 @@ export function PlayerDock({
   }, []);
 
   return (
-    <div className="fixed sm:relative bottom-3 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto z-40 w-full max-w-4xl px-3 sm:px-4 flex flex-col items-center select-none pointer-events-none sm:pointer-events-auto">
+    <div className="fixed sm:relative bottom-3 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto z-40 w-full max-w-4xl px-2 sm:px-4 flex flex-col items-center select-none pointer-events-none sm:pointer-events-auto pb-safe">
       {/* High-Contrast Glassmorphic Pill Dock */}
       <div
         id="player-dock-pill"
-        className="pointer-events-auto w-full bg-stone-950/95 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-4 transition-all duration-300"
+        className="pointer-events-auto w-full bg-stone-950/95 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1 sm:gap-4 transition-all duration-300"
       >
         {/* Left Side: Playback Controls */}
         <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
           <button
             id="prev-track-btn"
             onClick={onPrevTrack}
-            className="p-1.5 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+            className="p-1 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
             title="Previous Track"
           >
             <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -158,7 +158,7 @@ export function PlayerDock({
           <button
             id="next-track-btn"
             onClick={onNextTrack}
-            className="p-1.5 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+            className="p-1 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
             title="Next Track"
           >
             <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -168,9 +168,9 @@ export function PlayerDock({
         {/* Center: Sleek Embedded Mini Track Info & Scrub Bar */}
         <div
           id="center-mini-player-pill"
-          className="group flex-1 min-w-[110px] max-w-[240px] sm:max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl px-2 py-1 sm:px-3 sm:py-1.5 flex items-center justify-between gap-2 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
+          className="group flex-1 min-w-[95px] max-w-[240px] sm:max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl px-1.5 py-1 sm:px-3 sm:py-1.5 flex items-center justify-between gap-1.5 sm:gap-2 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
         >
-          {/* Mini Album Cover & Track Text Info - Click to Open Library */}
+          {/* Mini Album Cover & Track Text Info - Click to Open Full Screen */}
           <button
             onClick={() => {
               if (onOpenFullScreen) {
@@ -196,7 +196,7 @@ export function PlayerDock({
             </div>
 
             <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <span className="text-white font-semibold text-[11px] sm:text-sm leading-tight truncate">
+              <span className="text-white font-semibold text-[10px] sm:text-sm leading-tight truncate">
                 {currentTrack.artist}{currentTrack.featuredArtist ? ` ft. ${currentTrack.featuredArtist}` : ''}
               </span>
               <span className="text-white/70 text-[9px] sm:text-xs leading-tight truncate">
@@ -205,21 +205,21 @@ export function PlayerDock({
             </div>
           </button>
 
-          {/* Equalizer soundwave animation (Hidden on narrow mobile screens <480px for text space) */}
-          <div className="hidden xs:flex items-center gap-1.5 shrink-0 relative">
+          {/* Equalizer soundwave animation & Options */}
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 relative">
             {playerState.isPlaying ? (
-              <div className="flex items-end gap-[3px] h-3.5 px-0.5">
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-3" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-2" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.5s_ease-in-out_infinite] h-3.5" />
-                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite] h-2.5" />
+              <div className="flex items-end gap-[2px] sm:gap-[3px] h-3 sm:h-3.5 px-0.5">
+                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-2.5 sm:h-3" />
+                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-1.5 sm:h-2" />
+                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.5s_ease-in-out_infinite] h-3 sm:h-3.5" />
+                <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite] h-2 sm:h-2.5" />
               </div>
             ) : (
-              <div className="flex items-end gap-[3px] h-3.5 px-0.5 opacity-50">
-                <span className="w-0.5 bg-white/70 rounded-full h-2" />
+              <div className="flex items-end gap-[2px] sm:gap-[3px] h-3 sm:h-3.5 px-0.5 opacity-50">
+                <span className="w-0.5 bg-white/70 rounded-full h-1.5 sm:h-2" />
                 <span className="w-0.5 bg-white/70 rounded-full h-1" />
-                <span className="w-0.5 bg-white/70 rounded-full h-2" />
-                <span className="w-0.5 bg-white/70 rounded-full h-1.5" />
+                <span className="w-0.5 bg-white/70 rounded-full h-1.5 sm:h-2" />
+                <span className="w-0.5 bg-white/70 rounded-full h-1" />
               </div>
             )}
 
@@ -229,17 +229,17 @@ export function PlayerDock({
                 e.stopPropagation();
                 setShowSongDetailsModal(!showSongDetailsModal);
               }}
-              className="p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-0.5 sm:p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
               title="Song Details & Options"
             >
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
             {/* Song Details Popover */}
             {showSongDetailsModal && (
               <div
                 id="song-details-popover"
-                className="absolute bottom-10 right-0 w-60 bg-stone-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+                className="absolute bottom-10 -right-8 xs:right-0 w-56 sm:w-60 bg-stone-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
               >
                 <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
                   <img
@@ -259,7 +259,7 @@ export function PlayerDock({
                 <div className="py-2 space-y-1 text-[11px] text-white/70">
                   <div className="flex justify-between">
                     <span className="text-white/40">Album:</span>
-                    <span className="font-medium text-white truncate max-w-[130px]">{currentTrack.album}</span>
+                    <span className="font-medium text-white truncate max-w-[120px]">{currentTrack.album}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-white/40">Label:</span>
@@ -309,13 +309,13 @@ export function PlayerDock({
         </div>
 
         {/* Right Side: FullScreen, Lyrics, Song Library & Volume */}
-        <div className="flex items-center gap-1 sm:gap-2 text-white/80">
+        <div className="flex items-center gap-0.5 sm:gap-2 text-white/80 shrink-0">
           {/* Full Screen Dedicated Player Page Button */}
           {onOpenFullScreen && (
             <button
               id="fullscreen-page-btn"
               onClick={onOpenFullScreen}
-              className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-emerald-400 hover:bg-white/10"
+              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 text-white/80 hover:text-emerald-400 hover:bg-white/10"
               title="Open Full Screen Player & Lyrics Page"
             >
               <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -327,7 +327,7 @@ export function PlayerDock({
             <button
               id="song-library-btn"
               onClick={onOpenLibrary}
-              className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-amber-400 hover:bg-white/10"
+              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 text-white/80 hover:text-amber-400 hover:bg-white/10"
               title="View All Songs & Cover Art"
             >
               <ListMusic className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -340,7 +340,7 @@ export function PlayerDock({
               id="volume-btn"
               onClick={() => setShowVolumePopup(!showVolumePopup)}
               onDoubleClick={onToggleMute}
-              className="p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10"
+              className="p-1.5 sm:p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10"
               title="Volume control (Double click to mute)"
             >
               {playerState.isMuted || playerState.volume === 0 ? (
@@ -354,7 +354,7 @@ export function PlayerDock({
             {showVolumePopup && (
               <div
                 id="volume-popover"
-                className="absolute bottom-14 right-0 w-44 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+                className="absolute bottom-14 right-0 w-40 sm:w-44 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
               >
                 <div className="flex items-center justify-between text-xs text-white/70 mb-2">
                   <span>Volume</span>
