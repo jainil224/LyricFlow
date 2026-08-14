@@ -129,14 +129,14 @@ export function PlayerDock({
       {/* High-Contrast Glassmorphic Pill Dock */}
       <div
         id="player-dock-pill"
-        className="w-full bg-stone-950/90 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-3 py-2 sm:px-5 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4 transition-all duration-300"
+        className="w-full bg-stone-950/90 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-4 transition-all duration-300"
       >
         {/* Left Side: Playback Controls */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
           <button
             id="prev-track-btn"
             onClick={onPrevTrack}
-            className="p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+            className="p-1.5 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
             title="Previous Track"
           >
             <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -145,20 +145,20 @@ export function PlayerDock({
           <button
             id="play-pause-btn"
             onClick={onTogglePlay}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-white/20 focus:outline-none"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-white/20 focus:outline-none shrink-0"
             title={playerState.isPlaying ? 'Pause' : 'Play'}
           >
             {playerState.isPlaying ? (
-              <Pause className="w-5 h-5 fill-current" />
+              <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             ) : (
-              <Play className="w-5 h-5 fill-current ml-0.5" />
+              <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
             )}
           </button>
 
           <button
             id="next-track-btn"
             onClick={onNextTrack}
-            className="p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
+            className="p-1.5 sm:p-2 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-150 rounded-full focus:outline-none"
             title="Next Track"
           >
             <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
@@ -168,7 +168,7 @@ export function PlayerDock({
         {/* Center: Sleek Embedded Mini Track Info & Scrub Bar */}
         <div
           id="center-mini-player-pill"
-          className="group flex-1 max-w-[270px] sm:max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-2xl px-3 py-1.5 flex items-center justify-between gap-3 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
+          className="group flex-1 min-w-[110px] max-w-[240px] sm:max-w-[340px] bg-white/10 hover:bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl px-2 py-1 sm:px-3 sm:py-1.5 flex items-center justify-between gap-2 border border-white/15 relative overflow-hidden transition-all duration-200 shadow-sm"
         >
           {/* Mini Album Cover & Track Text Info - Click to Open Library */}
           <button
@@ -179,10 +179,10 @@ export function PlayerDock({
                 onOpenLibrary?.();
               }
             }}
-            className="flex-1 flex items-center gap-2.5 min-w-0 text-left cursor-pointer hover:opacity-90 transition-opacity"
+            className="flex-1 flex items-center gap-1.5 sm:gap-2.5 min-w-0 text-left cursor-pointer hover:opacity-90 transition-opacity"
             title="Click to view full screen lyrics page"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-white/20 relative shadow-sm">
+            <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg overflow-hidden shrink-0 border border-white/20 relative shadow-sm">
               <img
                 src={currentTrack.coverUrl}
                 alt={currentTrack.title}
@@ -195,18 +195,18 @@ export function PlayerDock({
               />
             </div>
 
-            <div className="flex-1 min-w-0 flex flex-col">
-              <span className="text-white font-semibold text-xs sm:text-sm leading-tight truncate">
+            <div className="flex-1 min-w-0 flex flex-col justify-center">
+              <span className="text-white font-semibold text-[11px] sm:text-sm leading-tight truncate">
                 {currentTrack.artist}{currentTrack.featuredArtist ? ` ft. ${currentTrack.featuredArtist}` : ''}
               </span>
-              <span className="text-white/70 text-[10px] sm:text-xs leading-tight truncate">
+              <span className="text-white/70 text-[9px] sm:text-xs leading-tight truncate">
                 {currentTrack.title}{currentTrack.version ? ` (${currentTrack.version})` : ''}
               </span>
             </div>
           </button>
 
-          {/* Equalizer soundwave animation & Options button */}
-          <div className="flex items-center gap-1.5 shrink-0 relative">
+          {/* Equalizer soundwave animation (Hidden on narrow mobile screens <480px for text space) */}
+          <div className="hidden xs:flex items-center gap-1.5 shrink-0 relative">
             {playerState.isPlaying ? (
               <div className="flex items-end gap-[3px] h-3.5 px-0.5">
                 <span className="w-0.5 bg-amber-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-3" />
