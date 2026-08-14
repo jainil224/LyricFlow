@@ -27,34 +27,7 @@ export default function App() {
     isEqOpen: false,
   });
 
-  // Real-time clock ticker
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Preload adjacent tracks in background for instant zero-latency mobile playback
-  useEffect(() => {
-    const nextIdx = (playerState.currentTrackIndex + 1) % TRACKS.length;
-    const prevIdx = (playerState.currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
-    audioEngine.preloadTrack(TRACKS[nextIdx].audioUrl);
-    audioEngine.preloadTrack(TRACKS[prevIdx].audioUrl);
-  }, [playerState.currentTrackIndex]);
-
-  const currentTrack = TRACKS[playerState.currentTrackIndex];
-
-  // Connect Mobile Media Session API for native hardware volume buttons & lock screen controls
-  useEffect(() => {
-    audioEngine.updateMediaSession(currentTrack, {
-      onPlay: handleTogglePlay,
-      onPause: handleTogglePlay,
-      onNext: handleNextTrack,
-      onPrev: handlePrevTrack,
-      onSeek: handleSeek,
-    });
-  }, [currentTrack, handleTogglePlay, handleNextTrack, handlePrevTrack, handleSeek]);
+  const currentTrack = (TRACKS && TRACKS[playerState.currentTrackIndex]) || TRACKS[0];
 
   // Select Track
   const handleSelectTrack = useCallback((index: number) => {
@@ -120,13 +93,13 @@ export default function App() {
 
   // Seek
   const handleSeek = useCallback((newTime: number) => {
-    const clampedTime = Math.max(0, Math.min(currentTrack.duration, newTime));
+    const clampedTime = Math.max(0, Math.min(currentTrack ? currentTrack.duration : 180, newTime));
     audioEngine.seek(clampedTime);
     setPlayerState((prev) => ({
       ...prev,
       progress: clampedTime,
     }));
-  }, [currentTrack.duration]);
+  }, [currentTrack]);
 
   // Volume
   const handleVolumeChange = useCallback((newVol: number) => {
@@ -146,6 +119,36 @@ export default function App() {
       return { ...prev, isMuted: nextMuted };
     });
   }, []);
+
+  // Real-time clock ticker
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Preload adjacent tracks in background for instant zero-latency mobile playback
+  useEffect(() => {
+    const nextIdx = (playerState.currentTrackIndex + 1) % TRACKS.length;
+    const prevIdx = (playerState.currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
+    audioEngine.preloadTrack(TRACKS[nextIdx].audioUrl);
+    audioEngine.preloadTrack(TRACKS[prevIdx].audioUrl);
+  }, [playerState.currentTrackIndex]);
+
+  // Connect Mobile Media Session API for native hardware volume buttons & lock screen controls
+  useEffect(() => {
+    if (!currentTrack) return;
+    audioEngine.updateMediaSession(currentTrack, {
+      onPlay: handleTogglePlay,
+      onPause: handleTogglePlay,
+      onNext: handleNextTrack,
+      onPrev: handlePrevTrack,
+      onSeek: handleSeek,
+    });
+  }, [currentTrack, handleTogglePlay, handleNextTrack, handlePrevTrack, handleSeek]);
+
+  if (!currentTrack) return null;
 
   // Real-time zero-latency audio progress subscriber & ticker
   useEffect(() => {

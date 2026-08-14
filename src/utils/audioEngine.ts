@@ -58,7 +58,7 @@ class AudioEngine {
     }
     if (!this.audioElement && typeof window !== 'undefined') {
       this.audioElement = new Audio();
-      this.audioElement.playsInline = true;
+      (this.audioElement as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
       this.audioElement.setAttribute('playsinline', 'true');
       this.audioElement.setAttribute('webkit-playsinline', 'true');
       this.audioElement.preload = 'auto';
@@ -93,27 +93,45 @@ class AudioEngine {
     track: { title: string; artist: string; featuredArtist?: string; album: string; coverUrl: string; duration: number },
     callbacks?: { onPlay?: () => void; onPause?: () => void; onNext?: () => void; onPrev?: () => void; onSeek?: (time: number) => void }
   ) {
-    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+    if (
+      typeof window !== 'undefined' &&
+      typeof navigator !== 'undefined' &&
+      'mediaSession' in navigator &&
+      'MediaMetadata' in window
+    ) {
       try {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.title,
-          artist: track.artist + (track.featuredArtist ? ` ft. ${track.featuredArtist}` : ''),
-          album: track.album,
-          artwork: [
-            { src: track.coverUrl, sizes: '512x512', type: 'image/jpeg' }
-          ]
-        });
+        const globalWin = window as unknown as { MediaMetadata: typeof MediaMetadata };
+        if (globalWin.MediaMetadata && track) {
+          let artworkUrl = '';
+          try {
+            artworkUrl = track.coverUrl ? (
+              track.coverUrl.startsWith('http') ? track.coverUrl : new URL(track.coverUrl, window.location.href).href
+            ) : '';
+          } catch {
+            artworkUrl = '';
+          }
 
-        if (callbacks?.onPlay) navigator.mediaSession.setActionHandler('play', callbacks.onPlay);
-        if (callbacks?.onPause) navigator.mediaSession.setActionHandler('pause', callbacks.onPause);
-        if (callbacks?.onNext) navigator.mediaSession.setActionHandler('nexttrack', callbacks.onNext);
-        if (callbacks?.onPrev) navigator.mediaSession.setActionHandler('previoustrack', callbacks.onPrev);
-        if (callbacks?.onSeek) {
-          navigator.mediaSession.setActionHandler('seekto', (details) => {
-            if (details.seekTime !== undefined) {
-              callbacks.onSeek!(details.seekTime);
-            }
+          navigator.mediaSession.metadata = new globalWin.MediaMetadata({
+            title: track.title || 'LyricFlow Track',
+            artist: (track.artist || '') + (track.featuredArtist ? ` ft. ${track.featuredArtist}` : ''),
+            album: track.album || '',
+            artwork: artworkUrl ? [{ src: artworkUrl, sizes: '512x512', type: 'image/jpeg' }] : []
           });
+        }
+
+        const ms = navigator.mediaSession;
+        if (callbacks?.onPlay) try { ms.setActionHandler('play', callbacks.onPlay); } catch {}
+        if (callbacks?.onPause) try { ms.setActionHandler('pause', callbacks.onPause); } catch {}
+        if (callbacks?.onNext) try { ms.setActionHandler('nexttrack', callbacks.onNext); } catch {}
+        if (callbacks?.onPrev) try { ms.setActionHandler('previoustrack', callbacks.onPrev); } catch {}
+        if (callbacks?.onSeek) {
+          try {
+            ms.setActionHandler('seekto', (details) => {
+              if (details.seekTime !== undefined) {
+                callbacks.onSeek!(details.seekTime);
+              }
+            });
+          } catch {}
         }
       } catch (err) {
         console.warn('MediaSession error:', err);
@@ -166,7 +184,7 @@ class AudioEngine {
     try {
       const audio = new Audio();
       audio.preload = 'auto';
-      audio.playsInline = true;
+      (audio as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
       audio.setAttribute('playsinline', 'true');
       audio.setAttribute('webkit-playsinline', 'true');
       audio.src = safeUrl;
@@ -199,7 +217,7 @@ class AudioEngine {
       const safeUrl = encodeURI(audioUrl);
       if (!this.audioElement) {
         this.audioElement = new Audio();
-        this.audioElement.playsInline = true;
+        (this.audioElement as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
         this.audioElement.setAttribute('playsinline', 'true');
         this.audioElement.setAttribute('webkit-playsinline', 'true');
         this.audioElement.preload = 'auto';
