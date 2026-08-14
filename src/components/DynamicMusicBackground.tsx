@@ -125,33 +125,32 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
       {/* 1. Heavy Blurred Cover Artwork Layer (Previous Image during Crossfade) */}
       {isCrossfading && (
         <div
-          className="absolute inset-0 bg-cover bg-center filter blur-3xl scale-125 transition-opacity duration-1000 opacity-0"
+          className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.4] contrast-[1.1] scale-125 transition-opacity duration-1000 opacity-0"
           style={{
             backgroundImage: `url(${prevCoverUrl})`,
           }}
         />
       )}
 
-      {/* 2. Heavy Blurred Cover Artwork Layer (Active Current Image) */}
+      {/* 2. High-Fidelity Saturated Cover Artwork Layer (Matches Active Song Card 100%) */}
       <div
-        className="absolute inset-0 bg-cover bg-center filter blur-3xl scale-125 transition-opacity duration-1000 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 pointer-events-none"
         style={{
           backgroundImage: `url(${currentCoverUrl})`,
-          opacity: 0.45,
+          opacity: 0.82,
           transform: `scale(calc(1.25 * var(--beat-scale)))`,
-          filter: `blur(48px) brightness(var(--beat-brightness))`,
+          filter: `blur(55px) saturate(1.45) contrast(1.1) brightness(var(--beat-brightness))`,
         }}
       />
 
-      {/* 3. Dynamic Atmospheric Blurred Radial Gradients using Extracted Colors */}
+      {/* 3. Accent & Primary Color Atmospheric Drifting Glows */}
       <div
-        className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-in-out"
+        className="absolute inset-0 pointer-events-none transition-all duration-1000 ease-in-out mix-blend-soft-light"
         style={{
           background: `
-            radial-gradient(circle at 20% 25%, var(--bg-primary), transparent 50%),
-            radial-gradient(circle at 80% 30%, var(--bg-secondary), transparent 50%),
-            radial-gradient(circle at 50% 85%, var(--bg-accent), transparent 55%),
-            linear-gradient(to bottom, var(--bg-dark), #070709)
+            radial-gradient(circle at 25% 25%, ${track.accentColor || 'var(--bg-primary)'}, transparent 55%),
+            radial-gradient(circle at 75% 35%, var(--bg-secondary), transparent 55%),
+            radial-gradient(circle at 50% 85%, var(--bg-accent), transparent 60%)
           `,
           transform: `scale(var(--beat-scale))`,
           filter: `brightness(var(--beat-brightness))`,
@@ -185,8 +184,8 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
         }}
       />
 
-      {/* 6. UI Readability Protection Dark Translucent Veil */}
-      <div className="absolute inset-0 bg-black/35 backdrop-blur-[2px] pointer-events-none" />
+      {/* 6. Subtle UI Protection Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 pointer-events-none" />
 
       {/* 6. Main Music Player UI Content (CoverFlow + PlayerDock) */}
       <div className="relative z-10 w-full h-full flex flex-col justify-between items-center py-4 sm:py-6 px-4">

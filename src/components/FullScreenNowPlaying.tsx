@@ -10,7 +10,8 @@ import {
   Volume1,
   Volume2,
   VolumeX,
-  Airplay
+  Airplay,
+  Sparkles,
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { extractColorsFromImage, ExtractedColors } from '../utils/colorExtractor';
@@ -169,11 +170,20 @@ export function FullScreenNowPlaying({
             <ChevronDown className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-xs font-bold uppercase tracking-widest text-white/70">
-              Now Playing
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="text-xs font-bold uppercase tracking-widest text-white/70">
+                Now Playing
+              </span>
+            </div>
+            <span className="text-white/30">•</span>
+            <div className="hidden sm:flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/15 px-3 py-1 rounded-full">
+              <Sparkles className="w-3 h-3 text-purple-400 animate-pulse" />
+              <span className="text-[11px] font-semibold text-white/90">
+                Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
+              </span>
+            </div>
           </div>
 
           <button

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Maximize2 } from 'lucide-react';
+import { Clock, Maximize2, Sparkles, Code } from 'lucide-react';
 import { TRACKS } from './data/tracks';
 import { CoverFlow } from './components/CoverFlow';
 import { PlayerDock } from './components/PlayerDock';
@@ -231,6 +231,14 @@ export default function App() {
               {formattedDate}
             </span>
           </div>
+        </div>
+
+        {/* Top Center: Creator Branding Badge */}
+        <div className="hidden md:flex items-center gap-2 bg-stone-900/60 hover:bg-stone-900/80 backdrop-blur-2xl border border-white/20 px-3.5 py-1.5 rounded-full shadow-2xl transition-all duration-300 group hover:border-purple-500/50">
+          <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
+          <span className="text-[11px] font-semibold text-white/90 tracking-wide">
+            Designed & Coded by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-bold">Jainil Patel</span>
+          </span>
         </div>
 
         {/* Top Right Corner: Full Screen Player Page Button */}
