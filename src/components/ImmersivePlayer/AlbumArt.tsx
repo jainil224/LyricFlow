@@ -9,7 +9,7 @@ interface AlbumArtProps {
 export function AlbumArt({ track }: AlbumArtProps) {
   return (
     <div
-      className="w-56 h-56 sm:w-80 sm:h-80 lg:w-[360px] lg:h-[360px] rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group shrink-0 transition-transform duration-300 ease-out"
+      className="w-44 h-44 xs:w-56 xs:h-56 sm:w-72 sm:h-72 lg:w-[360px] lg:h-[360px] rounded-2xl overflow-hidden border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group shrink-0 transition-transform duration-300 ease-out"
       style={{
         transform: `scale(calc(1 + var(--bass-energy, 0) * 0.015))`,
       }}

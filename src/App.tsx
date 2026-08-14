@@ -207,7 +207,7 @@ export default function App() {
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
 
       {/* Top Navigation / Header Bar */}
-      <header className="relative z-30 w-full max-w-5xl pt-2 px-3 sm:px-4 flex flex-col items-center gap-1.5 select-none">
+      <header className="relative z-30 w-full max-w-5xl pt-2 sm:pt-4 px-3 sm:px-4 flex flex-col items-center gap-1.5 select-none">
         <div className="w-full flex items-center justify-between gap-1.5">
           {/* Top Left Corner: Clean Time Pill Widget */}
           <div className="flex items-center bg-white/10 hover:bg-white/15 backdrop-blur-2xl border border-white/20 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] transition-all duration-300 shrink-0">
@@ -253,7 +253,7 @@ export default function App() {
       </header>
 
       {/* Main Interactive Stage: Centered 3D Cover Flow Carousel */}
-      <div className="w-full flex-1 flex items-center justify-center max-w-7xl px-4 relative z-20 pt-1 pb-16 sm:py-4">
+      <div className="w-full flex-1 flex items-center justify-center max-w-7xl px-2 sm:px-4 relative z-20 pt-1 pb-16 sm:py-4 my-auto">
         <CoverFlow
           tracks={TRACKS}
           activeIndex={playerState.currentTrackIndex}
