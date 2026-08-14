@@ -159,30 +159,21 @@ export default function App() {
 
     // 2. Instant ontimeupdate subscriber for 0ms latency audio sync
     const unsubscribeTime = audioEngine.subscribeTime((exactTime) => {
-      setPlayerState((prev) => {
-        const track = TRACKS[prev.currentTrackIndex];
-        if (exactTime >= track.duration) {
-          const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
-          audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
-          return { ...prev, currentTrackIndex: nextIdx, isPlaying: true, progress: 0 };
-        }
-        return { ...prev, progress: exactTime };
-      });
+      setPlayerState((prev) => ({ ...prev, progress: exactTime }));
     });
 
-    // 3. High-frequency 100ms ticker fallback for synthesised tracks
+    // 3. High-frequency 100ms ticker fallback for synthesised/non-HTML5 tracks
     let interval: number | null = null;
     if (playerState.isPlaying) {
       interval = window.setInterval(() => {
         setPlayerState((prev) => {
           const exactTime = audioEngine.getCurrentTime();
-          if (exactTime !== null) return prev; // Managed by subscriber above
+          if (exactTime !== null) return prev; // Managed by native audio engine & subscriber above
           const track = TRACKS[prev.currentTrackIndex];
           const nextProgress = prev.progress + 0.1;
           if (nextProgress >= track.duration) {
-            const nextIdx = (prev.currentTrackIndex + 1) % TRACKS.length;
-            audioEngine.play(TRACKS[nextIdx].melodyType, TRACKS[nextIdx].bpm, TRACKS[nextIdx].audioUrl);
-            return { ...prev, currentTrackIndex: nextIdx, isPlaying: true, progress: 0 };
+            handleNextTrack();
+            return { ...prev, progress: 0 };
           }
           return { ...prev, progress: nextProgress };
         });

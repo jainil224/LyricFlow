@@ -244,6 +244,9 @@ class AudioEngine {
         this.audioElement.onended = () => {
           this.triggerEnded();
         };
+        this.audioElement.onerror = () => {
+          this.hasAudioFileError = true;
+        };
       }
 
       // Check if URL has changed
@@ -251,12 +254,18 @@ class AudioEngine {
       if (!currentSrc || !currentSrc.endsWith(safeUrl)) {
         this.audioElement.src = safeUrl;
         this.audioElement.load();
+      } else if (this.audioElement.ended) {
+        this.audioElement.currentTime = 0;
       }
 
       this.audioElement.volume = this.currentVolume;
       const playPromise = this.audioElement.play();
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
+          if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) {
+            // Ignore play promise cancellation caused by rapid track changes
+            return;
+          }
           console.warn('Audio file playback fallback to synth:', err);
           this.hasAudioFileError = true;
         });
@@ -312,10 +321,8 @@ class AudioEngine {
     // Trigger beat listeners for UI reactivity immediately
     this.triggerBeat(this.step, isBassBeat);
 
-    // If custom audio file is playing cleanly, skip synth notes.
-    // If custom audio file is buffering on mobile, play instant synth notes so user gets 0ms feedback!
-    const isAudioBuffering = isCustomAudio && this.isAudioFileBuffering();
-    if ((isCustomAudio && !isAudioBuffering) || !this.ctx || !this.gainNode) return;
+    // If custom MP3 audio is playing without error, skip synthesized sound generation
+    if ((isCustomAudio && !this.hasAudioFileError) || !this.ctx || !this.gainNode) return;
     const now = this.ctx.currentTime;
 
     // Frequencies (C minor / Eb major scale vibes)

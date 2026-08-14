@@ -204,7 +204,7 @@ export const TRACKS: Track[] = [
     album: "Red (Taylor's Version)",
     duration: 223,
     coverUrl: '/covers/red.jpg',
-    audioUrl: '/songs/RED(MP3_320K).mp3',
+    audioUrl: '/songs/Taylor Swift - The Fate of Ophelia (Official Music Video)(MP3_320K).mp3',
     badge: 'REPUBLIC',
     accentColor: '#dc2626',
     bpm: 125,
