@@ -200,11 +200,11 @@ export function FullScreenNowPlaying({
         </div>
 
         {/* 3. Main Content Stage: 2-Column Desktop / Stacked Mobile */}
-        <div className="relative z-20 flex-1 w-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 overflow-hidden py-2">
+        <div className="relative z-20 flex-1 w-full max-w-7xl mx-auto px-4 sm:px-12 flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-8 lg:gap-16 overflow-hidden py-1 sm:py-2">
           {/* Left Column (Desktop) / Top Section (Mobile): Album Art & Integrated Controls */}
-          <div className="flex flex-col items-center lg:items-start gap-4 shrink-0 w-full sm:w-[300px] lg:w-[360px]">
+          <div className="flex flex-col items-center lg:items-start gap-2 sm:gap-4 shrink-0 w-full sm:w-[300px] lg:w-[360px]">
             {/* Album Artwork Rounded Card with Soft Shadow */}
-            <div className="w-48 h-48 sm:w-72 sm:h-72 lg:w-[340px] lg:h-[340px] rounded-2xl overflow-hidden border border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group shrink-0">
+            <div className="w-32 h-32 xs:w-40 xs:h-40 sm:w-72 sm:h-72 lg:w-[340px] lg:h-[340px] rounded-2xl overflow-hidden border border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.85)] relative group shrink-0">
               <img
                 src={track.coverUrl}
                 alt={track.title}
@@ -214,14 +214,14 @@ export function FullScreenNowPlaying({
                 }}
               />
               {track.badge && (
-                <span className="absolute top-3 left-3 text-[10px] font-bold tracking-widest text-white uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-md">
+                <span className="absolute top-2 left-2 text-[9px] sm:text-[10px] font-bold tracking-widest text-white uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-md">
                   {track.badge}
                 </span>
               )}
             </div>
 
             {/* Scrub Bar & Track Info */}
-            <div className="w-full space-y-1.5 pt-1 text-left">
+            <div className="w-full space-y-1 pt-0.5 text-left">
               {/* Progress Line */}
               <div
                 ref={progressBarRef}
@@ -236,14 +236,14 @@ export function FullScreenNowPlaying({
               </div>
 
               {/* Timestamps */}
-              <div className="flex justify-between text-[11px] font-mono text-white/60">
+              <div className="flex justify-between text-[10px] sm:text-[11px] font-mono text-white/60">
                 <span>{formattedCurrent}</span>
                 <span>{formattedRemaining}</span>
               </div>
 
               {/* Title & Artist */}
-              <div className="flex flex-col text-center lg:text-left pt-0.5 min-w-0">
-                <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate drop-shadow">
+              <div className="flex flex-col text-center lg:text-left min-w-0">
+                <h3 className="text-base sm:text-xl font-bold text-white tracking-tight truncate drop-shadow">
                   {track.title}
                 </h3>
                 <p className="text-xs sm:text-sm font-medium text-white/70 truncate">
@@ -254,10 +254,10 @@ export function FullScreenNowPlaying({
           </div>
 
           {/* Right Column (Desktop) / Bottom Section (Mobile): Synced Lyrics Panel */}
-          <div className="flex-1 w-full h-full max-h-[460px] flex flex-col justify-center overflow-hidden relative">
+          <div className="flex-1 w-full h-full max-h-[180px] xs:max-h-[260px] sm:max-h-[460px] flex flex-col justify-center overflow-hidden relative">
             <div
               ref={containerRef}
-              className="flex-1 overflow-y-auto px-2 py-8 space-y-6 text-left scrollbar-none"
+              className="flex-1 overflow-y-auto px-2 py-4 sm:py-8 space-y-4 sm:space-y-6 text-left scrollbar-none"
             >
               {lyrics.map((line, idx) => {
                 const isActive = idx === activeLyricIndex;
@@ -282,39 +282,39 @@ export function FullScreenNowPlaying({
         </div>
 
         {/* 4. Bottom Playback Controls Bar */}
-        <div className="relative z-30 w-full max-w-xl mx-auto pb-6 sm:pb-8 px-4 shrink-0 flex justify-center">
-          <div className="bg-stone-950/80 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-2 flex items-center justify-between gap-6 shadow-2xl">
+        <div className="relative z-30 w-full max-w-xl mx-auto pb-3 sm:pb-8 px-3 shrink-0 flex justify-center">
+          <div className="w-full sm:w-auto bg-stone-950/90 backdrop-blur-2xl border border-white/20 rounded-full px-4 py-2 sm:px-6 flex items-center justify-between gap-3 sm:gap-6 shadow-2xl">
             <button
               onClick={onPrevTrack}
-              className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all"
+              className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all p-1"
               title="Previous Track"
             >
-              <SkipBack className="w-5 h-5 fill-current" />
+              <SkipBack className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             </button>
 
             <button
               onClick={onTogglePlay}
-              className="w-10 h-10 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-white/20"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-stone-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-white/20 shrink-0"
               title={playerState.isPlaying ? 'Pause' : 'Play'}
             >
               {playerState.isPlaying ? (
-                <Pause className="w-5 h-5 fill-current" />
+                <Pause className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
               ) : (
-                <Play className="w-5 h-5 fill-current ml-0.5" />
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
               )}
             </button>
 
             <button
               onClick={onNextTrack}
-              className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all"
+              className="text-white/80 hover:text-white hover:scale-110 active:scale-95 transition-all p-1"
               title="Next Track"
             >
-              <SkipForward className="w-5 h-5 fill-current" />
+              <SkipForward className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             </button>
 
             {/* Volume Control */}
-            <div className="flex items-center gap-2 text-white/70 pl-4 border-l border-white/15">
-              <button onClick={onToggleMute} className="hover:text-white transition-colors">
+            <div className="flex items-center gap-2 text-white/70 pl-2 sm:pl-4 border-l border-white/15">
+              <button onClick={onToggleMute} className="hover:text-white transition-colors p-1">
                 {playerState.isMuted || playerState.volume === 0 ? (
                   <VolumeX className="w-4 h-4 text-rose-400" />
                 ) : (
@@ -328,9 +328,9 @@ export function FullScreenNowPlaying({
                 step="0.01"
                 value={playerState.isMuted ? 0 : playerState.volume}
                 onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-                className="w-20 sm:w-24 accent-white bg-white/20 h-1 rounded-lg cursor-pointer"
+                className="hidden sm:inline-block w-20 sm:w-24 accent-white bg-white/20 h-1 rounded-lg cursor-pointer"
               />
-              <Volume2 className="w-4 h-4" />
+              <Volume2 className="hidden sm:inline-block w-4 h-4" />
             </div>
 
             <button className="p-1 rounded-full text-white/70 hover:text-white transition-colors">

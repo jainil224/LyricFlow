@@ -24,7 +24,7 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack, onOpenFullScreen
   }, []);
 
   return (
-    <div className="relative w-full max-w-4xl h-[220px] xs:h-[245px] sm:h-[350px] flex items-center justify-center select-none perspective-[1400px] overflow-visible my-auto">
+    <div className="relative w-full max-w-4xl h-[180px] xs:h-[220px] sm:h-[350px] flex items-center justify-center select-none perspective-[1400px] overflow-visible my-auto">
       {tracks.map((track, index) => {
         const offset = index - activeIndex;
         const isVisible = Math.abs(offset) <= 2;
@@ -105,14 +105,14 @@ export function CoverFlow({ tracks, activeIndex, onSelectTrack, onOpenFullScreen
               zIndex,
               transformStyle: 'preserve-3d',
             }}
-            className={`absolute cursor-pointer w-[155px] xs:w-[180px] sm:w-[215px] h-[205px] xs:h-[235px] sm:h-[280px] rounded-2xl p-1.5 sm:p-2 flex flex-col justify-between will-change-transform transform-gpu ${
+            className={`absolute cursor-pointer w-[135px] xs:w-[165px] sm:w-[215px] h-[175px] xs:h-[210px] sm:h-[280px] rounded-2xl p-1.5 sm:p-2 flex flex-col justify-between will-change-transform transform-gpu ${
               offset === 0
                 ? 'bg-gradient-to-b from-white/25 via-white/15 to-white/5 backdrop-blur-2xl border-2 border-white/40 shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_30px_rgba(255,255,255,0.2)]'
                 : 'bg-white/10 backdrop-blur-lg border border-white/15 shadow-xl hover:border-white/30 hover:opacity-95'
             }`}
           >
             {/* Top Album Art Box */}
-            <div className="w-full h-[135px] xs:h-[155px] sm:h-[190px] relative rounded-xl overflow-visible">
+            <div className="w-full h-[115px] xs:h-[140px] sm:h-[190px] relative rounded-xl overflow-visible">
               <CardArt track={track} isActive={offset === 0} />
             </div>
 
