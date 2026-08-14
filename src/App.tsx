@@ -253,7 +253,7 @@ export default function App() {
       </header>
 
       {/* Main Interactive Stage: Centered 3D Cover Flow Carousel */}
-      <div className="w-full flex-1 flex items-center justify-center max-w-7xl px-4 relative z-20 py-4">
+      <div className="w-full flex-1 flex items-center justify-center max-w-7xl px-4 relative z-20 pt-1 pb-16 sm:py-4">
         <CoverFlow
           tracks={TRACKS}
           activeIndex={playerState.currentTrackIndex}

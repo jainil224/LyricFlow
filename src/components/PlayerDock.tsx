@@ -125,11 +125,11 @@ export function PlayerDock({
   }, []);
 
   return (
-    <div className="relative z-40 w-full max-w-4xl px-3 sm:px-4 flex flex-col items-center select-none">
+    <div className="fixed sm:relative bottom-3 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto z-40 w-full max-w-4xl px-3 sm:px-4 flex flex-col items-center select-none pointer-events-none sm:pointer-events-auto">
       {/* High-Contrast Glassmorphic Pill Dock */}
       <div
         id="player-dock-pill"
-        className="w-full bg-stone-950/90 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-4 transition-all duration-300"
+        className="pointer-events-auto w-full bg-stone-950/95 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 rounded-full px-2 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-4 transition-all duration-300"
       >
         {/* Left Side: Playback Controls */}
         <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
