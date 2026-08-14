@@ -8,7 +8,6 @@ import {
   VolumeX,
   MoreHorizontal,
   ListMusic,
-  Mic,
   Maximize2
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
@@ -313,19 +312,6 @@ export function PlayerDock({
               title="Open Full Screen Player & Lyrics Page"
             >
               <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-          )}
-
-          {/* Live Karaoke Lyrics Button */}
-          {onOpenLyrics && (
-            <button
-              id="lyrics-toggle-btn"
-              onClick={onOpenLyrics}
-              className="p-2 rounded-full transition-all duration-150 text-amber-300 hover:text-amber-400 hover:bg-white/10 relative"
-              title="View Live Synced Lyrics"
-            >
-              <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             </button>
           )}
 
