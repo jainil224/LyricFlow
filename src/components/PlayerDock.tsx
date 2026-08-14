@@ -7,7 +7,8 @@ import {
   Volume2,
   VolumeX,
   MoreHorizontal,
-  ListMusic
+  ListMusic,
+  Mic
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
@@ -22,6 +23,7 @@ interface PlayerDockProps {
   onVolumeChange: (vol: number) => void;
   onToggleMute: () => void;
   onOpenLibrary?: () => void;
+  onOpenLyrics?: () => void;
 }
 
 export function PlayerDock({
@@ -34,6 +36,7 @@ export function PlayerDock({
   onVolumeChange,
   onToggleMute,
   onOpenLibrary,
+  onOpenLyrics,
 }: PlayerDockProps) {
   const [showVolumePopup, setShowVolumePopup] = useState(false);
   const [showSongDetailsModal, setShowSongDetailsModal] = useState(false);
@@ -296,8 +299,21 @@ export function PlayerDock({
           </div>
         </div>
 
-        {/* Right Side: Song Library & Volume */}
+        {/* Right Side: Lyrics, Song Library & Volume */}
         <div className="flex items-center gap-1 sm:gap-2 text-white/80">
+          {/* Live Karaoke Lyrics Button */}
+          {onOpenLyrics && (
+            <button
+              id="lyrics-toggle-btn"
+              onClick={onOpenLyrics}
+              className="p-2 rounded-full transition-all duration-150 text-amber-300 hover:text-amber-400 hover:bg-white/10 relative"
+              title="View Live Synced Lyrics"
+            >
+              <Mic className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+            </button>
+          )}
+
           {/* Song Library Drawer Button */}
           {onOpenLibrary && (
             <button

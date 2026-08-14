@@ -5,12 +5,15 @@ import { CoverFlow } from './components/CoverFlow';
 import { PlayerDock } from './components/PlayerDock';
 import { DynamicMusicBackground } from './components/DynamicMusicBackground';
 import { SongListDrawer } from './components/SongListDrawer';
+import { LyricsModal } from './components/LyricsModal';
+import { LiveLyricsSideCard } from './components/LiveLyricsSideCard';
 import { PlayerState } from './types';
 import { audioEngine } from './utils/audioEngine';
 
 export default function App() {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [isLibraryOpen, setIsLibraryOpen] = useState<boolean>(false);
+  const [isLyricsOpen, setIsLyricsOpen] = useState<boolean>(false);
   const [playerState, setPlayerState] = useState<PlayerState>({
     currentTrackIndex: 2, // Default to Charlie Puth - How Long (center card in reference image)
     isPlaying: false,
@@ -218,13 +221,25 @@ export default function App() {
         </div>
       </header>
 
-      {/* Center 3D Cover Flow Display */}
-      <div className="w-full flex-1 flex items-center justify-center relative z-20 py-6">
-        <CoverFlow
-          tracks={TRACKS}
-          activeIndex={playerState.currentTrackIndex}
-          onSelectTrack={handleSelectTrack}
-        />
+      {/* Main Interactive Stage: 3D Cover Flow + Right Side Live Lyrics Card */}
+      <div className="w-full flex-1 flex flex-col xl:flex-row items-center justify-center gap-6 max-w-7xl px-4 relative z-20 py-4">
+        {/* Left/Center: 3D Cover Flow Carousel */}
+        <div className="flex-1 w-full flex items-center justify-center">
+          <CoverFlow
+            tracks={TRACKS}
+            activeIndex={playerState.currentTrackIndex}
+            onSelectTrack={handleSelectTrack}
+          />
+        </div>
+
+        {/* Right Side: Live Synced Lyrics Card */}
+        <div className="shrink-0 flex items-center justify-center">
+          <LiveLyricsSideCard
+            track={currentTrack}
+            playerState={playerState}
+            onSeek={handleSeek}
+          />
+        </div>
       </div>
 
       {/* Bottom Floating Translucent Player Bar */}
@@ -239,6 +254,7 @@ export default function App() {
           onVolumeChange={handleVolumeChange}
           onToggleMute={handleToggleMute}
           onOpenLibrary={() => setIsLibraryOpen(true)}
+          onOpenLyrics={() => setIsLyricsOpen(true)}
         />
       </div>
 
@@ -251,6 +267,17 @@ export default function App() {
         isPlaying={playerState.isPlaying}
         onSelectTrack={handleSelectTrack}
       />
+
+      {/* Live Karaoke Lyrics Modal */}
+      {isLyricsOpen && (
+        <LyricsModal
+          track={currentTrack}
+          playerState={playerState}
+          onClose={() => setIsLyricsOpen(false)}
+          onSeek={handleSeek}
+          onTogglePlay={handleTogglePlay}
+        />
+      )}
     </DynamicMusicBackground>
   );
 }
