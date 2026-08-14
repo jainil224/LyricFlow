@@ -10,7 +10,7 @@ import {
   VolumeX
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
-import { getLyricsForTrack, LyricLine } from '../data/lyrics';
+import { getLyricsForTrack, fetchLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
 
 interface FullScreenPlayerPageProps {

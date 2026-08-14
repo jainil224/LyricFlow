@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { extractColorsFromImage, ExtractedColors } from '../utils/colorExtractor';
-import { getLyricsForTrack, LyricLine } from '../data/lyrics';
+import { getLyricsForTrack, fetchLyricsForTrack, LyricLine } from '../data/lyrics';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
 import { AnimatedBackground } from './AnimatedBackground';
 import { LineMaskSplit } from './LineMaskSplit';
@@ -58,6 +58,7 @@ export function FullScreenNowPlaying({
     );
   });
 
+  const [lyrics, setLyrics] = useState<LyricLine[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -96,9 +97,21 @@ export function FullScreenNowPlaying({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose, onTogglePlay, onPrevTrack, onNextTrack]);
 
-  // Get lyrics for active track
-  const lyrics: LyricLine[] = useMemo(() => {
-    return getLyricsForTrack(track.id, track.title, track.artist);
+  // Load lyrics for active track
+  useEffect(() => {
+    let isMounted = true;
+    const initial = getLyricsForTrack(track.id, track.title, track.artist);
+    setLyrics(initial);
+
+    fetchLyricsForTrack(track.id).then((loaded) => {
+      if (isMounted && loaded.length > 0) {
+        setLyrics(loaded);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [track.id, track.title, track.artist]);
 
   // Derived active lyric index (memoized re-render optimization)
