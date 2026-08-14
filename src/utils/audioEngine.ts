@@ -19,7 +19,7 @@ class AudioEngine {
   private audioElement: HTMLAudioElement | null = null;
   private analyserNode: AnalyserNode | null = null;
   private hasAudioFileError: boolean = false;
-  private currentVolume: number = 0.8;
+  private currentVolume: number = 1.0;
 
   public subscribeBeat(listener: BeatListener) {
     this.beatListeners.add(listener);
@@ -49,7 +49,7 @@ class AudioEngine {
       if (AudioContextClass) {
         this.ctx = new AudioContextClass();
         this.gainNode = this.ctx.createGain();
-        this.gainNode.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        this.gainNode.gain.setValueAtTime(0.8, this.ctx.currentTime);
         this.gainNode.connect(this.ctx.destination);
       }
     }
@@ -62,6 +62,7 @@ class AudioEngine {
       this.audioElement.setAttribute('playsinline', 'true');
       this.audioElement.setAttribute('webkit-playsinline', 'true');
       this.audioElement.preload = 'auto';
+      this.audioElement.volume = this.currentVolume;
       this.audioElement.ontimeupdate = () => {
         if (this.audioElement) {
           this.triggerTime(this.audioElement.currentTime);
@@ -84,6 +85,38 @@ class AudioEngine {
         playPromise.then(() => {
           if (this.audioElement) this.audioElement.pause();
         }).catch(() => {});
+      }
+    }
+  }
+
+  public updateMediaSession(
+    track: { title: string; artist: string; featuredArtist?: string; album: string; coverUrl: string; duration: number },
+    callbacks?: { onPlay?: () => void; onPause?: () => void; onNext?: () => void; onPrev?: () => void; onSeek?: (time: number) => void }
+  ) {
+    if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.title,
+          artist: track.artist + (track.featuredArtist ? ` ft. ${track.featuredArtist}` : ''),
+          album: track.album,
+          artwork: [
+            { src: track.coverUrl, sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+
+        if (callbacks?.onPlay) navigator.mediaSession.setActionHandler('play', callbacks.onPlay);
+        if (callbacks?.onPause) navigator.mediaSession.setActionHandler('pause', callbacks.onPause);
+        if (callbacks?.onNext) navigator.mediaSession.setActionHandler('nexttrack', callbacks.onNext);
+        if (callbacks?.onPrev) navigator.mediaSession.setActionHandler('previoustrack', callbacks.onPrev);
+        if (callbacks?.onSeek) {
+          navigator.mediaSession.setActionHandler('seekto', (details) => {
+            if (details.seekTime !== undefined) {
+              callbacks.onSeek!(details.seekTime);
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('MediaSession error:', err);
       }
     }
   }
@@ -116,7 +149,7 @@ class AudioEngine {
   public setVolume(volume: number) {
     this.currentVolume = Math.max(0, Math.min(1, volume));
     if (this.gainNode && this.ctx) {
-      this.gainNode.gain.setTargetAtTime(this.currentVolume * 0.4, this.ctx.currentTime, 0.05);
+      this.gainNode.gain.setTargetAtTime(this.currentVolume * 0.8, this.ctx.currentTime, 0.05);
     }
     if (this.audioElement) {
       this.audioElement.volume = this.currentVolume;

@@ -45,6 +45,17 @@ export default function App() {
 
   const currentTrack = TRACKS[playerState.currentTrackIndex];
 
+  // Connect Mobile Media Session API for native hardware volume buttons & lock screen controls
+  useEffect(() => {
+    audioEngine.updateMediaSession(currentTrack, {
+      onPlay: handleTogglePlay,
+      onPause: handleTogglePlay,
+      onNext: handleNextTrack,
+      onPrev: handlePrevTrack,
+      onSeek: handleSeek,
+    });
+  }, [currentTrack, handleTogglePlay, handleNextTrack, handlePrevTrack, handleSeek]);
+
   // Select Track
   const handleSelectTrack = useCallback((index: number) => {
     audioEngine.unlock();
