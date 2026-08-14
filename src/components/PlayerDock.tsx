@@ -4,14 +4,10 @@ import {
   Pause,
   SkipBack,
   SkipForward,
-  Cast,
-  SlidersHorizontal,
   Volume2,
   VolumeX,
   MoreHorizontal,
-  Check,
-  Radio,
-  Sparkles
+  ListMusic
 } from 'lucide-react';
 import { Track, PlayerState } from '../types';
 import { getUniqueFallbackCover } from '../utils/artworkResolver';
@@ -25,6 +21,7 @@ interface PlayerDockProps {
   onSeek: (newTime: number) => void;
   onVolumeChange: (vol: number) => void;
   onToggleMute: () => void;
+  onOpenLibrary?: () => void;
 }
 
 export function PlayerDock({
@@ -36,12 +33,9 @@ export function PlayerDock({
   onSeek,
   onVolumeChange,
   onToggleMute,
+  onOpenLibrary,
 }: PlayerDockProps) {
-  const [showAirplayModal, setShowAirplayModal] = useState(false);
-  const [showEqModal, setShowEqModal] = useState(false);
   const [showVolumePopup, setShowVolumePopup] = useState(false);
-  const [selectedDevice, setSelectedDevice] = useState('Studio Display Audio');
-  const [eqPreset, setEqPreset] = useState<'Standard' | 'Bass Boost' | 'Vocal' | 'Acoustic'>('Standard');
 
   const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -57,16 +51,10 @@ export function PlayerDock({
     onSeek(percentage * currentTrack.duration);
   };
 
-  // Close modals on outside click
+  // Close volume modal on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('#airplay-popover') && !target.closest('#airplay-btn')) {
-        setShowAirplayModal(false);
-      }
-      if (!target.closest('#eq-popover') && !target.closest('#eq-btn')) {
-        setShowEqModal(false);
-      }
       if (!target.closest('#volume-popover') && !target.closest('#volume-btn')) {
         setShowVolumePopup(false);
       }
@@ -179,97 +167,19 @@ export function PlayerDock({
           </div>
         </div>
 
-        {/* Right Side: Airplay, Equalizer & Volume */}
+        {/* Right Side: Song Library & Volume */}
         <div className="flex items-center gap-1 sm:gap-2 text-white/80">
-          {/* Airplay button */}
-          <div className="relative">
+          {/* Song Library Drawer Button */}
+          {onOpenLibrary && (
             <button
-              id="airplay-btn"
-              onClick={() => setShowAirplayModal(!showAirplayModal)}
-              className={`p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10 ${
-                showAirplayModal ? 'text-rose-400 bg-white/15' : ''
-              }`}
-              title="AirPlay & Wireless Devices"
+              id="song-library-btn"
+              onClick={onOpenLibrary}
+              className="p-2 rounded-full transition-all duration-150 text-white/80 hover:text-amber-400 hover:bg-white/10"
+              title="View All Songs & Cover Art"
             >
-              <Cast className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ListMusic className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
-
-            {/* AirPlay Popover */}
-            {showAirplayModal && (
-              <div
-                id="airplay-popover"
-                className="absolute bottom-14 right-0 w-64 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
-              >
-                <div className="flex items-center gap-2 pb-2 border-b border-white/10 text-xs font-semibold uppercase tracking-wider text-white/70">
-                  <Radio className="w-3.5 h-3.5 text-rose-400" />
-                  <span>AirPlay & Devices</span>
-                </div>
-                <div className="mt-2 space-y-1 text-sm">
-                  {['Studio Display Audio', 'Living Room HomePod', 'AirPods Pro (2nd gen)', 'MacBook Pro Speakers'].map(
-                    (device) => (
-                      <button
-                        key={device}
-                        onClick={() => {
-                          setSelectedDevice(device);
-                          setShowAirplayModal(false);
-                        }}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between text-xs hover:bg-white/10 transition-colors"
-                      >
-                        <span className={selectedDevice === device ? 'text-rose-300 font-medium' : 'text-white/80'}>
-                          {device}
-                        </span>
-                        {selectedDevice === device && <Check className="w-3.5 h-3.5 text-rose-400" />}
-                      </button>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* EQ / Sound settings */}
-          <div className="relative">
-            <button
-              id="eq-btn"
-              onClick={() => setShowEqModal(!showEqModal)}
-              className={`p-2 rounded-full transition-all duration-150 hover:text-white hover:bg-white/10 ${
-                showEqModal ? 'text-amber-400 bg-white/15' : ''
-              }`}
-              title="Audio Equalizer"
-            >
-              <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-
-            {/* EQ Popover */}
-            {showEqModal && (
-              <div
-                id="eq-popover"
-                className="absolute bottom-14 right-0 w-56 bg-stone-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 shadow-2xl z-50 text-white animate-in fade-in zoom-in-95 duration-150"
-              >
-                <div className="flex items-center gap-2 pb-2 border-b border-white/10 text-xs font-semibold uppercase tracking-wider text-white/70">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Sound Profile</span>
-                </div>
-                <div className="mt-2 space-y-1 text-xs">
-                  {(['Standard', 'Bass Boost', 'Vocal', 'Acoustic'] as const).map((preset) => (
-                    <button
-                      key={preset}
-                      onClick={() => {
-                        setEqPreset(preset);
-                        setShowEqModal(false);
-                      }}
-                      className="w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 transition-colors"
-                    >
-                      <span className={eqPreset === preset ? 'text-amber-300 font-medium' : 'text-white/80'}>
-                        {preset}
-                      </span>
-                      {eqPreset === preset && <Check className="w-3.5 h-3.5 text-amber-400" />}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
 
           {/* Volume Control */}
           <div className="relative">

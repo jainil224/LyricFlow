@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Music2 } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { TRACKS } from './data/tracks';
 import { CoverFlow } from './components/CoverFlow';
 import { PlayerDock } from './components/PlayerDock';
 import { DynamicMusicBackground } from './components/DynamicMusicBackground';
+import { SongListDrawer } from './components/SongListDrawer';
 import { PlayerState } from './types';
 import { audioEngine } from './utils/audioEngine';
 
 export default function App() {
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [isLibraryOpen, setIsLibraryOpen] = useState<boolean>(false);
   const [playerState, setPlayerState] = useState<PlayerState>({
     currentTrackIndex: 2, // Default to Charlie Puth - How Long (center card in reference image)
     isPlaying: false,
@@ -17,6 +20,14 @@ export default function App() {
     isAirplayActive: false,
     isEqOpen: false,
   });
+
+  // Real-time clock ticker
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const currentTrack = TRACKS[playerState.currentTrackIndex];
 
@@ -155,21 +166,27 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handlePrevTrack, handleNextTrack, handleTogglePlay]);
 
+  // Format real-time clock (e.g., "10:50:33 AM")
+  const formattedTime = currentTime.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+
   return (
     <DynamicMusicBackground track={currentTrack} isPlaying={playerState.isPlaying}>
       {/* Top Subtle Ambient Light Flare */}
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
 
-      {/* LyricFlow Header Badge */}
-      <header className="relative z-30 w-full max-w-4xl pt-1.5 px-2 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 bg-black/40 backdrop-blur-xl border border-white/15 px-3.5 py-1.5 rounded-full shadow-lg">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-rose-500 to-amber-300 flex items-center justify-center text-white shadow-md">
-            <Music2 className="w-4 h-4" />
-          </div>
-          <div className="flex flex-col text-left leading-tight">
-            <span className="text-white font-bold text-sm tracking-wide">LyricFlow</span>
-            <span className="text-white/60 text-[10px] tracking-tight">Stream the best in English music</span>
-          </div>
+      {/* Top Navigation / Header Bar */}
+      <header className="relative z-30 w-full max-w-5xl pt-3 px-4 flex items-center justify-start">
+        {/* Top Left Corner: Real-Time Clock */}
+        <div className="flex items-center gap-2 bg-black/40 backdrop-blur-xl border border-white/15 px-3.5 py-1.5 rounded-full shadow-lg">
+          <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+          <span className="text-white/90 font-mono text-xs font-semibold tracking-wider">
+            {formattedTime}
+          </span>
         </div>
       </header>
 
@@ -193,8 +210,19 @@ export default function App() {
           onSeek={handleSeek}
           onVolumeChange={handleVolumeChange}
           onToggleMute={handleToggleMute}
+          onOpenLibrary={() => setIsLibraryOpen(true)}
         />
       </div>
+
+      {/* Music Library Modal / Drawer */}
+      <SongListDrawer
+        isOpen={isLibraryOpen}
+        onClose={() => setIsLibraryOpen(false)}
+        tracks={TRACKS}
+        currentTrackIndex={playerState.currentTrackIndex}
+        isPlaying={playerState.isPlaying}
+        onSelectTrack={handleSelectTrack}
+      />
     </DynamicMusicBackground>
   );
 }
