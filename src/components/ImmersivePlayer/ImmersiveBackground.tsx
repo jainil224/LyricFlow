@@ -9,7 +9,10 @@ interface ImmersiveBackgroundProps {
 }
 
 export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBackgroundProps) {
-  const { primary, secondary, accent, dark } = palette;
+  const primary = palette.primary || track.accentColor || '#a855f7';
+  const secondary = palette.secondary || track.accentColor || '#3b82f6';
+  const accent = track.accentColor || palette.accent || '#ef4444';
+  const dark = palette.dark || '#070709';
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#070709] pointer-events-none select-none z-0">
@@ -22,9 +25,9 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
           transition={{ duration: 1.2, ease: 'easeInOut' }}
           className="absolute inset-0 w-full h-full"
         >
-          {/* Layer 1: Blurred Cover Artwork Base Layer */}
+          {/* Layer 1: High-Fidelity Blurred Cover Artwork Base Layer (Matches Song Banner 100%) */}
           <div
-            className="absolute inset-0 bg-cover bg-center filter blur-[100px] opacity-40 scale-125 transition-all duration-1000"
+            className="absolute inset-0 bg-cover bg-center filter blur-[70px] opacity-65 scale-125 transition-all duration-1000"
             style={{
               backgroundImage: `url(${track.coverUrl})`,
               transform: `scale(calc(1.25 + var(--bass-energy, 0) * 0.04))`,
@@ -42,10 +45,10 @@ export function ImmersiveBackground({ track, palette, isPlaying }: ImmersiveBack
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-1/4 -left-1/4 w-[700px] h-[700px] sm:w-[950px] sm:h-[950px] rounded-full filter blur-[120px] mix-blend-screen transition-opacity duration-300"
+            className="absolute -top-1/4 -left-1/4 w-[700px] h-[700px] sm:w-[950px] sm:h-[950px] rounded-full filter blur-[100px] mix-blend-screen transition-opacity duration-300"
             style={{
               backgroundColor: primary,
-              opacity: `calc(0.65 * var(--glow-intensity, 1))`,
+              opacity: `calc(0.7 * var(--glow-intensity, 1))`,
               transform: `scale(calc(1 + var(--bass-energy, 0) * 0.06))`,
             }}
           />
