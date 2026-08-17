@@ -9,7 +9,7 @@ export interface ExtractedColors {
  * Pure client-side color extraction using HTML Canvas
  * Extracts primary, secondary, accent, and dark tones from any cover artwork image.
  */
-export function extractColorsFromImage(imageUrl: string): Promise<ExtractedColors> {
+export function extractColorsFromImage(imageUrl: string, fallbackUrl?: string): Promise<ExtractedColors> {
   return new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -90,7 +90,11 @@ export function extractColorsFromImage(imageUrl: string): Promise<ExtractedColor
     };
 
     img.onerror = () => {
-      resolve(getFallbackColors());
+      if (fallbackUrl && imageUrl !== fallbackUrl) {
+         extractColorsFromImage(fallbackUrl).then(resolve);
+      } else {
+         resolve(getFallbackColors());
+      }
     };
 
     img.src = imageUrl;

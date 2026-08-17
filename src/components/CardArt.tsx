@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Track } from '../types';
-import { getUniqueFallbackCover } from '../utils/artworkResolver';
+import { getUniqueFallbackCover, getBollywoodFallbackCover } from '../utils/artworkResolver';
 
 interface CardArtProps {
   track: Track;
@@ -51,7 +51,9 @@ export function CardArt({ track, isActive }: CardArtProps) {
           referrerPolicy="no-referrer"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = getUniqueFallbackCover(track);
+            target.src = track.genre === 'bollywood'
+              ? getBollywoodFallbackCover(track)
+              : getUniqueFallbackCover(track);
           }}
         />
 

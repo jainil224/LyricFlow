@@ -12,6 +12,7 @@ export interface Track {
   accentColor: string;
   bpm: number;
   melodyType: 'pop-synth' | 'reggae-vibe' | 'rnb-groove' | 'hiphop-beat' | 'funky-bass';
+  genre?: 'english' | 'bollywood'; // Music section identifier
 }
 
 export interface PlayerState {

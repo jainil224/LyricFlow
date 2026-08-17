@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, ReactNode } from 'react';
 import { Track } from '../types';
 import { extractColorsFromImage, ExtractedColors } from '../utils/colorExtractor';
 import { audioEngine } from '../utils/audioEngine';
+import { getBollywoodFallbackCover, getUniqueFallbackCover } from '../utils/artworkResolver';
 
 interface DynamicMusicBackgroundProps {
   track: Track;
@@ -39,7 +40,9 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
         if (isMounted) setIsCrossfading(false);
       }, 1200);
 
-      extractColorsFromImage(track.coverUrl).then((extracted) => {
+      const fallbackUrl = track.genre === 'bollywood' ? getBollywoodFallbackCover(track) : getUniqueFallbackCover(track);
+
+      extractColorsFromImage(track.coverUrl, fallbackUrl).then((extracted) => {
         if (isMounted) {
           setColors(extracted);
         }
@@ -47,7 +50,9 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
 
       return () => clearTimeout(timer);
     } else {
-      extractColorsFromImage(track.coverUrl).then((extracted) => {
+      const fallbackUrl = track.genre === 'bollywood' ? getBollywoodFallbackCover(track) : getUniqueFallbackCover(track);
+
+      extractColorsFromImage(track.coverUrl, fallbackUrl).then((extracted) => {
         if (isMounted) {
           setColors(extracted);
         }
@@ -72,20 +77,30 @@ export function DynamicMusicBackground({ track, isPlaying, children }: DynamicMu
     >
       {/* 1. Heavy Blurred Cover Artwork Layer (Previous Image during Crossfade) */}
       {isCrossfading && (
-        <div
-          className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.4] contrast-[1.1] scale-125 transition-opacity duration-1000 opacity-0 will-change-transform transform-gpu translate-z-0"
-          style={{
-            backgroundImage: `url(${prevCoverUrl})`,
+        <img
+          src={prevCoverUrl}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 opacity-0 will-change-transform transform-gpu translate-z-0"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = track.genre === 'bollywood'
+              ? getBollywoodFallbackCover(track)
+              : getUniqueFallbackCover(track);
           }}
         />
       )}
 
       {/* 2. High-Fidelity Saturated Cover Artwork Layer (Matches Active Song Card 100%) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 pointer-events-none will-change-transform transform-gpu translate-z-0"
-        style={{
-          backgroundImage: `url(${currentCoverUrl})`,
-          opacity: 0.82,
+      <img
+        src={currentCoverUrl}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover filter blur-[55px] saturate-[1.45] contrast-[1.1] scale-125 transition-opacity duration-1000 pointer-events-none will-change-transform transform-gpu translate-z-0"
+        style={{ opacity: 0.82 }}
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = track.genre === 'bollywood'
+            ? getBollywoodFallbackCover(track)
+            : getUniqueFallbackCover(track);
         }}
       />
 
