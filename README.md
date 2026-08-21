@@ -14,7 +14,7 @@ Stream the best in English music with LyricFlow. An interactive 3D Cover Flow mu
 1. Install dependencies:
    ```bash
    npm install
-   ````
+   ```
 
 2. Start the development server:
    ```bash
